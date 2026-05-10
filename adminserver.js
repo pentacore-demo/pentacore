@@ -10,8 +10,9 @@ const multer = require("multer"); // For handling file uploads
 const FormData = require('form-data');
 const adminRouter = express.Router();
 
-// 👉 PUT YOUR DOWNLOADED FILE HERE
-const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-ba4d8926e8.json');
+const serviceAccount = require(
+  path.join(__dirname, "fir-c1b0e-firebase-adminsdk-fbsvc-ba4d8926e8.json")
+);
 
 // 🔥 Firebase Admin INIT (safe + correct)
 if (!admin.apps.length) {
