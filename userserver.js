@@ -7,7 +7,7 @@ const axios = require('axios');
 const userRouter = express.Router();
 
 // 👉 PUT YOUR DOWNLOADED FILE HERE
-const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-ba4d8926e8.json');
+const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-27084d8477.json');
 
 // 🔥 Firebase Admin INIT (safe + correct)
 if (!admin.apps.length) {
