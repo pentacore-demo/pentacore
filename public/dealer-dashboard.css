@@ -1,0 +1,117 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(120deg, #6d4c41, #f5f5dc); /* Brown to cream gradient */
+    color: #3e2723; /* Dark brown */
+    padding: 10px;
+}
+
+/* Container for content */
+.container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 3rem;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+}
+
+/* Heading */
+h1 {
+    font-size: 2rem;
+    color: #5b3a29; /* Brown */
+    margin-bottom: 1rem;
+}
+
+/* Instructions for QR Code */
+p {
+    font-size: 1rem;
+    color: #6d4c41; /* Medium brown */
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+/* Input field styling */
+input[type="text"] {
+    width: 80%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #d7ccc8; /* Light brown */
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #3e2723; /* Dark brown */
+    outline: none;
+    transition: 0.3s;
+    background: #f5f5dc; /* Cream background */
+}
+
+input[type="text"]:focus {
+    border-color: #5b3a29;
+    box-shadow: 0 0 8px rgba(91, 58, 41, 0.5);
+}
+
+/* Button styling */
+button {
+    width: 80%;
+    padding: 12px;
+    background: #5b3a29;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #f5f5dc; /* Cream */
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #3e2723;
+    box-shadow: 0 5px 10px rgba(62, 39, 35, 0.5);
+}
+
+/* QR Details Section */
+.details {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    color: #5b3a29;
+    text-align: left;
+}
+
+.details h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.details p {
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    input[type="text"], button {
+        width: 90%;
+    }
+}

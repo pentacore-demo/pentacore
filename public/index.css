@@ -1,0 +1,209 @@
+/* Reset and Box Sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Background */
+body {
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ffffff, #ffffff); /* Vibrant gradient */
+    padding: 20px;
+}
+
+/* Login Page Container */
+.login-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+/* Logo Section */
+.logo-container {
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 300px;
+    height: auto;
+    transition: transform 0.3s ease-in-out;
+    max-width: 100%;  /* Ensure the logo doesn't exceed the container's width */
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+/* Form Container */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Headings */
+.welcome-heading {
+    font-size: 24px;
+    font-weight: bold;
+    color: #004aad;
+    margin-bottom: 10px;
+}
+
+.login-heading {
+    font-size: 20px;
+    color: #004aad;
+    margin-bottom: 20px;
+}
+
+/* Input Fields */
+.input-field {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #004aad;
+    font-size: 16px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-field:focus {
+    border-color: #003366;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons */
+.send-otp-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #004aad, #003366);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+ /* Verify OTP Button */
+.verify-otp-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #28a745, #218838); /* Green gradient for verification */
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.send-otp-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.whatsapp-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #25d366;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+}
+
+.whatsapp-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.whatsapp-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+/* Help Section */
+.help-section {
+    margin-top: 20px;
+}
+
+.help-section p {
+    font-size: 14px;
+    color: #004aad;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .welcome-heading {
+        font-size: 22px;
+    }
+
+    .login-heading {
+        font-size: 18px;
+    }
+
+    .input-field {
+        padding: 10px;
+    }
+
+    .send-otp-btn,
+    .whatsapp-btn {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+  
+        /* Increase logo size on tablets */
+        .logo {
+            width: 180px; /* Larger size for mobile/tablet */
+        }
+    }
+
+
+@media (max-width: 480px) {
+    .welcome-heading {
+        font-size: 20px;
+    }
+
+    .login-heading {
+        font-size: 16px;
+    }
+    .logo {
+        width: 250px; /* Larger logo for small screens */
+    }
+}
+
+.whatsapp-link {
+    text-decoration: none;
+}

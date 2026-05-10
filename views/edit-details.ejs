@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Bank Details</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#f6f8fb;
+    color:#1e293b;
+    min-height:100vh;
+    overflow-x:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* BACKGROUND */
+
+.bg{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.45;
+    z-index:0;
+    pointer-events:none;
+}
+
+.bg1{
+    width:320px;
+    height:320px;
+    background:#c7d2fe;
+    top:-100px;
+    left:-100px;
+}
+
+.bg2{
+    width:320px;
+    height:320px;
+    background:#fde68a;
+    bottom:-100px;
+    right:-100px;
+}
+
+/* CARD */
+
+.card{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:520px;
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.7);
+    border-radius:30px;
+    padding:34px 30px;
+    box-shadow:
+        0 20px 40px rgba(15,23,42,0.06),
+        0 2px 10px rgba(15,23,42,0.04);
+}
+
+/* HEADER */
+
+.header{
+    text-align:center;
+    margin-bottom:28px;
+}
+
+.header h1{
+    font-size:32px;
+    color:#0f172a;
+    margin-bottom:8px;
+}
+
+.header p{
+    color:#64748b;
+    font-size:14px;
+}
+
+/* ALERT */
+
+.alert{
+    background:#fee2e2;
+    color:#dc2626;
+    padding:16px;
+    border-radius:18px;
+    margin-bottom:24px;
+    font-size:14px;
+    text-align:center;
+    font-weight:500;
+}
+
+/* DETAILS */
+
+.details{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.detail-box{
+    background:#f8fafc;
+    border-radius:18px;
+    padding:18px;
+    border:1px solid #e2e8f0;
+}
+
+.detail-label{
+    display:block;
+    font-size:13px;
+    color:#64748b;
+    margin-bottom:8px;
+}
+
+.detail-value{
+    font-size:16px;
+    font-weight:600;
+    color:#0f172a;
+    word-break:break-word;
+}
+
+/* BUTTONS */
+
+.btn{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:18px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    margin-top:24px;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-danger{
+    background:linear-gradient(135deg,#ef4444,#dc2626);
+    color:white;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg,#818cf8,#6366f1);
+    color:white;
+}
+
+/* EMPTY STATE */
+
+.empty-state{
+    text-align:center;
+}
+
+.empty-state h2{
+    font-size:24px;
+    margin-bottom:12px;
+    color:#0f172a;
+}
+
+.empty-state p{
+    font-size:14px;
+    color:#64748b;
+    line-height:1.6;
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    body{
+        align-items:flex-start;
+    }
+
+    .card{
+        padding:28px 22px;
+        border-radius:26px;
+    }
+
+    .header h1{
+        font-size:28px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+
+<div class="card">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>Edit Bank Details</h1>
+
+        <p>
+            Manage your beneficiary bank account information
+        </p>
+
+    </div>
+
+    <!-- MESSAGE -->
+
+    <% if (message) { %>
+
+        <div class="alert">
+            <%= message %>
+        </div>
+
+    <% } %>
+
+    <!-- BENEFICIARY DETAILS -->
+
+    <% if (beneficiary) { %>
+
+        <div class="details">
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Beneficiary ID
+                </span>
+
+                <div class="detail-value">
+                    <%= beneficiary.beneficiary_id %>
+                </div>
+
+            </div>
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Beneficiary Name
+                </span>
+
+                <div class="detail-value">
+                    <%= beneficiary.beneficiary_name %>
+                </div>
+
+            </div>
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Bank Account Number
+                </span>
+
+                <div class="detail-value">
+                    <%= beneficiary.beneficiary_instrument_details.bank_account_number %>
+                </div>
+
+            </div>
+
+            <div class="detail-box">
+
+                <span class="detail-label">
+                    Bank IFSC
+                </span>
+
+                <div class="detail-value">
+                    <%= beneficiary.beneficiary_instrument_details.bank_ifsc %>
+                </div>
+
+            </div>
+
+        </div>
+
+        <form action="/user/edit-details/remove" method="POST">
+
+            <button type="submit" class="btn btn-danger">
+
+                Remove Bank Account
+
+            </button>
+
+        </form>
+
+    <% } else { %>
+
+        <div class="empty-state">
+
+            <h2>
+                No Bank Account Found
+            </h2>
+
+            <p>
+                We could not find your bank details.
+                Please add a bank account to continue.
+            </p>
+
+            <a href="/user/add-bank" class="btn btn-primary">
+
+                Add Bank Account
+
+            </a>
+
+        </div>
+
+    <% } %>
+
+</div>
+
+</body>
+
+</html>

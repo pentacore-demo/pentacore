@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit User</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== BASE ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#f6f8fb;
+    color:#1e293b;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+/* ===== BG ===== */
+.bg{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.45;
+    z-index:0;
+    pointer-events:none;
+}
+
+.bg1{
+    width:320px;
+    height:320px;
+    background:#c7d2fe;
+    top:-100px;
+    left:-100px;
+}
+
+.bg2{
+    width:340px;
+    height:340px;
+    background:#fde68a;
+    bottom:-100px;
+    right:-100px;
+}
+
+/* ===== CONTAINER ===== */
+.wrapper{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+}
+
+/* ===== CARD ===== */
+.form-card{
+    width:100%;
+    max-width:900px;
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(20px);
+    border-radius:32px;
+    padding:38px;
+    border:1px solid rgba(255,255,255,0.7);
+    box-shadow:
+        0 20px 40px rgba(15,23,42,0.06),
+        0 2px 10px rgba(15,23,42,0.04);
+}
+
+/* ===== HEADER ===== */
+.header{
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:34px;
+    color:#0f172a;
+    margin-bottom:8px;
+}
+
+.header p{
+    color:#64748b;
+    font-size:14px;
+}
+
+/* ===== FORM ===== */
+form{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+}
+
+/* ===== GRID ===== */
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+/* ===== FIELD ===== */
+.field{
+    display:flex;
+    flex-direction:column;
+}
+
+.field label{
+    font-size:14px;
+    font-weight:600;
+    color:#334155;
+    margin-bottom:10px;
+}
+
+/* ===== INPUT ===== */
+.field input,
+.field select{
+    height:56px;
+    border-radius:18px;
+    border:1px solid #e2e8f0;
+    background:rgba(255,255,255,0.9);
+    padding:0 18px;
+    font-size:14px;
+    outline:none;
+    transition:.25s;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:#a5b4fc;
+    box-shadow:0 0 0 4px rgba(99,102,241,.08);
+}
+
+/* ===== READONLY ===== */
+.field input[readonly]{
+    background:#f1f5f9;
+    color:#64748b;
+}
+
+/* ===== BUTTON ===== */
+.submit-btn{
+    margin-top:10px;
+}
+
+.submit-btn button{
+    width:100%;
+    height:58px;
+    border:none;
+    border-radius:20px;
+    background:linear-gradient(135deg,#818cf8,#6366f1);
+    color:white;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    box-shadow:0 10px 20px rgba(99,102,241,.15);
+}
+
+.submit-btn button:hover{
+    transform:translateY(-2px);
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:800px){
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .wrapper{
+        padding:20px 14px;
+    }
+
+    .form-card{
+        padding:26px 20px;
+        border-radius:26px;
+    }
+
+    .header h1{
+        font-size:28px;
+    }
+
+}
+
+</style>
+
+<script>
+
+function validatePassword(event){
+
+    event.preventDefault();
+
+    const password =
+        prompt("Enter the password to save changes:");
+
+    if(password === "123456789"){
+
+        document
+        .getElementById("editUserForm")
+        .submit();
+
+    } else {
+
+        alert(
+            "Incorrect password. Changes not saved."
+        );
+
+    }
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+
+<div class="wrapper">
+
+    <div class="form-card">
+
+        <!-- HEADER -->
+        <div class="header">
+
+            <h1>Edit User</h1>
+
+            <p>
+                Update user details, wallet balance and status
+            </p>
+
+        </div>
+
+        <!-- FORM -->
+        <form
+            id="editUserForm"
+            action="/admin/edit-user/<%= user.mobileNumber %>"
+            method="POST"
+            onsubmit="validatePassword(event)"
+        >
+
+            <div class="form-grid">
+
+                <!-- FULL NAME -->
+                <div class="field">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        value="<%= user.fullName %>"
+                        required
+                    >
+
+                </div>
+
+                <!-- MOBILE -->
+                <div class="field">
+
+                    <label for="mobileNumber">
+                        Mobile Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="mobileNumber"
+                        name="mobileNumber"
+                        value="<%= user.mobileNumber %>"
+                        readonly
+                    >
+
+                </div>
+
+                <!-- DOB -->
+                <div class="field">
+
+                    <label for="dob">
+                        Date of Birth
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dob"
+                        name="dob"
+                        value="<%= user.dob %>"
+                    >
+
+                </div>
+
+                <!-- USER TYPE -->
+                <div class="field">
+
+                    <label for="userType">
+                        User Type
+                    </label>
+
+                    <select
+                        id="userType"
+                        name="userType"
+                    >
+
+                        <option
+                            value="painter"
+                            <%= user.userType === 'painter' ? 'selected' : '' %>
+                        >
+                            Painter
+                        </option>
+
+                        <option
+                            value="contractor"
+                            <%= user.userType === 'contractor' ? 'selected' : '' %>
+                        >
+                            Contractor
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- ADDRESS -->
+                <div class="field">
+
+                    <label for="address">
+                        Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        value="<%= user.address %>"
+                    >
+
+                </div>
+
+                <!-- PIN CODE -->
+                <div class="field">
+
+                    <label for="pinCode">
+                        Pin Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pinCode"
+                        name="pinCode"
+                        value="<%= user.pinCode %>"
+                    >
+
+                </div>
+
+                <!-- STATE -->
+                <div class="field">
+
+                    <label for="state">
+                        State
+                    </label>
+
+                    <input
+                        type="text"
+                        id="state"
+                        name="state"
+                        value="<%= user.state %>"
+                    >
+
+                </div>
+
+                <!-- CITY -->
+                <div class="field">
+
+                    <label for="city">
+                        City
+                    </label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        value="<%= user.city %>"
+                    >
+
+                </div>
+
+                <!-- STATUS -->
+                <div class="field">
+
+                    <label for="status">
+                        Status
+                    </label>
+
+                    <select
+                        id="status"
+                        name="status"
+                    >
+
+                        <option
+                            value="active"
+                            <%= user.status === 'active' ? 'selected' : '' %>
+                        >
+                            Active
+                        </option>
+
+                        <option
+                            value="inactive"
+                            <%= user.status === 'inactive' ? 'selected' : '' %>
+                        >
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- WALLET -->
+                <div class="field">
+
+                    <label for="walletBalance">
+                        Wallet Balance
+                    </label>
+
+                    <input
+                        type="number"
+                        id="walletBalance"
+                        name="walletBalance"
+                        value="<%= user.walletBalance %>"
+                    >
+
+                </div>
+
+            </div>
+
+            <!-- BUTTON -->
+            <div class="submit-btn">
+
+                <button type="submit">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

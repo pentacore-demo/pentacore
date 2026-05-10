@@ -1,0 +1,116 @@
+/* Reset default styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+}
+
+/* Center the container with a max-width */
+.container {
+    width: 90%;
+    max-width: 500px; /* Limit the maximum width */
+    margin: 50px auto;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
+}
+
+/* Page Title */
+h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center-align all form elements */
+}
+
+form label {
+    width: 100%; /* Ensure labels span the container */
+    max-width: 400px; /* Constrain label width */
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+form input, form select {
+    width: 100%; /* Full width relative to parent */
+    max-width: 400px; /* Constrain input field width */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Input focus */
+form input:focus, form select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Buttons */
+form .button-group {
+    display: flex;
+    justify-content: center; /* Center the buttons */
+    gap: 10px; /* Space between buttons */
+    width: 100%;
+    max-width: 400px;
+}
+
+button {
+    flex: 1; /* Ensure buttons are proportional */
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #3498db;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #2980b9;
+    box-shadow: 0 4px 8px rgba(41, 128, 185, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Secondary Button (Cancel) */
+button.secondary {
+    background: #e74c3c;
+}
+
+button.secondary:hover {
+    background: #c0392b;
+    box-shadow: 0 4px 8px rgba(192, 57, 43, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    form .button-group {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    button {
+        width: 100%; /* Buttons stack and stretch on small screens */
+    }
+}

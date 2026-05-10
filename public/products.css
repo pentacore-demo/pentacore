@@ -1,0 +1,185 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #eef2f7; /* Softer background */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Align content to the center of the screen */
+    min-height: 100vh;
+    flex-direction: column;
+    color: #333;
+}
+
+/* Product Page Container */
+.product-page-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto; /* Ensures the container is centered */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the content inside */
+}
+
+/* Heading */
+.product-page-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+/* Row of product cards */
+.product-row {
+    display: flex;
+    flex-direction: column; /* Stack vertically on small screens */
+    gap: 30px;
+    align-items: center;
+    justify-content: center; /* Center cards in the row */
+    width: 100%;
+}
+
+/* Product Card */
+.product-card {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+}
+
+/* Image Section */
+.card-left {
+    width: 40%;
+    position: relative;
+}
+
+.card-left img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Right Section (Content) */
+.card-right {
+    width: 60%;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Heading Style */
+.card-right h3 {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Product Description */
+.product-description {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+/* Product Info Section (Pack and Points Row) */
+.product-info {
+    display: flex; /* Flex row layout */
+    gap: 15px; /* Space between pack and points */
+    align-items: center;
+}
+
+/* Points Tag (Offer Style) */
+.product-points {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #3b82f6; /* New blue color */
+    padding: 10px 20px;
+    border-radius: 50px;
+    width: fit-content;
+    display: inline-block;
+    text-align: center;
+    margin-left: 15px; /* Add spacing between pack and points */
+}
+
+/* Pack Section */
+.product-pack {
+    font-size: .8rem;
+    font-weight: bold;
+    color: #16a34a;
+    padding: 8px 15px;
+    border: 2px solid #16a34a;
+    border-radius: 30px;
+    width: fit-content;
+    display: inline-block;
+    text-align: center;
+}
+
+/* Hover Effect for Card */
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Decorative Elements - Top-left and Bottom-right Circular Shape */
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 40px;
+    height: 40px;
+    background-color: #3b82f6; /* Matches the points box */
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.product-card::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    width: 40px;
+    height: 40px;
+    background-color: #3b82f6; /* Matches the points box */
+    border-radius: 50%;
+    z-index: 0;
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    .product-card {
+        flex-direction: row;
+        align-items: center;
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .card-left {
+        width: 30%;
+    }
+
+    .card-right {
+        width: 70%;
+        padding-left: 15px;
+    }
+
+    .product-points {
+        font-size: 1rem;
+        padding: 8px 15px;
+    }
+}

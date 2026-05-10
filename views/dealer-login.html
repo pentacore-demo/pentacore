@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dealer Login</title>
+    <link rel="stylesheet" href="/admin/dealer-login.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Blinking Line -->
+        <div class="blinking-line">Welcome to JL Puraskar Dealer Portal</div>
+
+        <!-- Heading -->
+        <h1>Dealer Login</h1>
+
+        <!-- Login Form -->
+        <form action="/dealer/login" method="POST">
+            <input type="text" name="userId" placeholder="User ID" required> <!-- Changed to userId -->
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

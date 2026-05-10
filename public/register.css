@@ -1,0 +1,103 @@
+/* General page styling */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to bottom right, #ffffff, #63a7ff);
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Logo and welcome text styling */
+  .logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    width: 120px;
+    height: auto;
+  }
+  
+  
+  /* Register box styling */
+  .register-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .register-box h2 {
+    font-size: 1.3em;
+    color: #004aad;
+  }
+  
+  /* Input group styling */
+  .input-group {
+    margin-top: 15px;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  
+  .input-group input,
+  .input-group select {
+    width: 100%; /* Ensures all fields are equal in width */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+  }
+  
+  /* Button styling */
+  .button {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #004aad, #0a8dc1);
+    color: white;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .button:hover {
+    background: linear-gradient(135deg, #0a8dc1, #004aad);
+  }
+  
+  /* Responsive design for smaller screens */
+  @media (max-width: 600px) {
+    .register-box {
+      width: 90%;
+      padding: 20px;
+      transform: scale(0.9); /* Scale down the entire box */
+    }
+  
+    .logo {
+      width: 100px;
+    }
+  
+    .button {
+      font-size: 0.9em;
+      padding: 10px;
+    }
+  
+    .welcome-text {
+      font-size: 1.2em;
+    }
+  }
+  

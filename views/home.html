@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+/* ===== BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f6f8fb;
+    color: #1e293b;
+}
+
+/* ===== LAYOUT ===== */
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 240px;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #334155;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #475569;
+    padding: 10px 12px;
+    border-radius: 8px;
+    transition: 0.2s;
+    font-size: 14px;
+}
+
+.menu a:hover {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+/* ===== MAIN ===== */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: #4f46e5;
+    color: white;
+}
+
+.btn.soft {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+/* ===== CONTENT ===== */
+.content {
+    padding: 25px;
+}
+
+/* ===== FILTERS ===== */
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filters button {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    cursor: pointer;
+}
+
+.filters button.active {
+    background: #4f46e5;
+    color: white;
+}
+
+/* ===== CARDS ===== */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card {
+    padding: 18px;
+    border-radius: 14px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+
+/* pastel subtle colors */
+.card:nth-child(1)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #6366f1;
+    opacity: 0.05;
+    border-radius: 14px;
+}
+
+.card:nth-child(2)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #22c55e;
+    opacity: 0.05;
+    border-radius: 14px;
+}
+
+.card:nth-child(3)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #f59e0b;
+    opacity: 0.05;
+    border-radius: 14px;
+}
+
+.card h3 {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.card p {
+    font-size: 26px;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+/* ===== GRID ===== */
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+}
+
+/* ===== PANEL ===== */
+.panel {
+    background: white;
+    border-radius: 14px;
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+}
+
+.panel h3 {
+    margin-bottom: 10px;
+}
+
+/* ===== TOP USERS ===== */
+.user {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* ===== ACTIONS ===== */
+.actions {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
+
+.action {
+    padding: 12px;
+    text-align: center;
+    background: #f8fafc;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+
+.action:hover {
+    background: #4f46e5;
+    color: white;
+}
+
+/* ===== MOBILE ===== */
+
+.mobile-toggle{
+    display:none;
+}
+
+.overlay{
+    display:none;
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        position: fixed;
+        left: -260px;
+        top: 0;
+        width: 240px;
+        height: 100vh;
+        z-index: 1000;
+        transition: 0.3s ease;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    }
+
+    .sidebar.active{
+        left: 0;
+    }
+
+    .overlay.active{
+        display:block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.25);
+        z-index: 999;
+    }
+
+    .mobile-toggle{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        width:42px;
+        height:42px;
+        border:none;
+        border-radius:10px;
+        background:#eef2ff;
+        color:#4f46e5;
+        cursor:pointer;
+        font-size:18px;
+    }
+
+    .topbar{
+        gap:10px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .content{
+        padding:18px;
+    }
+
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>Admin</h2>
+
+    <div class="menu">
+        <a href="/admin/create-qr">Create QR</a>
+        <a href="/admin/view-qr">Batches</a>
+        <a href="/admin/user-management">Users</a>
+        <a href="/admin/qr-admin-history">QR History</a>
+        <a href="/admin/wallet">Wallet</a>
+        <a href="/admin/create-dealer">Dealer</a>
+        <a href="/admin/admin-withdraw">Withdraw</a>
+        <a href="/admin/admin-scheme">Schemes</a>
+         <a href="/admin/bills">Bills</a>
+    </div>
+</div>
+
+<div class="overlay" onclick="toggleSidebar()"></div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="topbar">
+
+    <div style="display:flex;align-items:center;gap:12px;">
+
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div>Dashboard</div>
+
+    </div>
+
+        <div>
+            <button class="btn soft" onclick="backup()">Backup</button>
+            <a href="/admin/logout"><button class="btn primary">Logout</button></a>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <div class="filters">
+            <button onclick="load(1,this)" class="active">1D</button>
+            <button onclick="load(7,this)">7D</button>
+            <button onclick="load(30,this)">30D</button>
+            <button onclick="load(365,this)">ALL</button>
+        </div>
+
+        <!-- KPI -->
+        <div class="cards">
+            <div class="card"><h3>Users</h3><p id="users">0</p></div>
+            <div class="card"><h3>QR</h3><p id="qr">0</p></div>
+            <div class="card"><h3>Points</h3><p id="points">0</p></div>
+        </div>
+
+        <div class="grid">
+
+            <!-- TOP USERS -->
+            <div class="panel">
+                <h3>Top Users</h3>
+                <div id="top"></div>
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="panel">
+                <h3>Quick Actions</h3>
+                <div class="actions">
+                    <div class="action" onclick="go('/admin/create-qr')">Create QR</div>
+                    <div class="action" onclick="go('/admin/view-qr')">Batches</div>
+                    <div class="action" onclick="go('/admin/user-management')">Users</div>
+                    <div class="action" onclick="go('/admin/wallet')">Wallet</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<script>
+
+function go(u){ location.href=u }
+
+function toggleSidebar(){
+
+    document.querySelector('.sidebar')
+        .classList.toggle('active');
+
+    document.querySelector('.overlay')
+        .classList.toggle('active');
+}
+
+let current = 1;
+
+function load(days, btn) {
+    current = days;
+
+    document.querySelectorAll('.filters button')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    fetch(`/admin/dashboard-data?days=${days}`)
+        .then(res => res.json())
+        .then(data => {
+
+            if (!data.success) {
+                console.error("API Error");
+                return;
+            }
+
+            // KPI
+            document.getElementById('users').innerText = data.totalUsers;
+            document.getElementById('qr').innerText = data.totalQR;
+            document.getElementById('points').innerText = data.totalPoints;
+
+       // TOP USERS
+let html = '';
+
+data.topUsers.forEach((u, i) => {
+
+    html += `
+    <div class="user">
+
+        <div style="display:flex;flex-direction:column;">
+            <span>#${i + 1} ${u.name}</span>
+
+            <small style="color:#64748b;">
+                ${u.mobileNumber}
+            </small>
+        </div>
+
+        <b>${u.points}</b>
+
+    </div>`;
+});
+
+document.getElementById('top').innerHTML = html;
+
+})
+.catch(err => {
+    console.error("Fetch error:", err);
+});
+}
+
+/* AUTO REFRESH */
+setInterval(()=>load(current,document.querySelector('.active')),10000);
+
+/* BACKUP */
+function backup(){
+    let p=prompt("Password?");
+    if(!p) return;
+
+    fetch('/admin/backup',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({password:p})
+    })
+    .then(r=>r.blob())
+    .then(b=>{
+        let a=document.createElement('a');
+        a.href=URL.createObjectURL(b);
+        a.download='backup.zip';
+        a.click();
+    });
+}
+
+load(1,document.querySelector('.filters button'));
+
+</script>
+
+</body>
+</html>

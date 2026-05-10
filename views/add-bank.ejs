@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Add Bank Details</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+
+      font-family:'Inter',sans-serif;
+
+      background:#f4f7fb;
+
+      min-height:100vh;
+
+      display:flex;
+
+      justify-content:center;
+
+      align-items:center;
+
+      padding:20px;
+
+      color:#0f172a;
+
+    }
+
+    .container{
+
+      width:100%;
+
+      max-width:420px;
+
+      background:white;
+
+      border-radius:28px;
+
+      padding:30px 24px;
+
+      box-shadow:
+      0 15px 40px rgba(15,23,42,0.08);
+
+    }
+
+    .logo-box{
+
+      width:70px;
+
+      height:70px;
+
+      border-radius:22px;
+
+      background:linear-gradient(
+        135deg,
+        #6366f1,
+        #4f46e5
+      );
+
+      display:flex;
+
+      justify-content:center;
+
+      align-items:center;
+
+      margin:0 auto 20px;
+
+      color:white;
+
+      font-size:28px;
+
+      font-weight:700;
+
+      box-shadow:
+      0 12px 25px rgba(79,70,229,.22);
+
+    }
+
+    h1{
+
+      text-align:center;
+
+      font-size:28px;
+
+      font-weight:700;
+
+      margin-bottom:8px;
+
+      color:#111827;
+
+    }
+
+    .subtitle{
+
+      text-align:center;
+
+      font-size:14px;
+
+      color:#64748b;
+
+      margin-bottom:30px;
+
+      line-height:1.6;
+
+    }
+
+    form{
+
+      display:flex;
+
+      flex-direction:column;
+
+      gap:18px;
+
+    }
+
+    .input-group{
+
+      display:flex;
+
+      flex-direction:column;
+
+    }
+
+    label{
+
+      margin-bottom:8px;
+
+      font-size:14px;
+
+      font-weight:600;
+
+      color:#334155;
+
+    }
+
+    input{
+
+      width:100%;
+
+      height:54px;
+
+      border-radius:16px;
+
+      border:1px solid #dbe4f0;
+
+      background:#f8fafc;
+
+      padding:0 16px;
+
+      font-size:15px;
+
+      font-family:'Inter',sans-serif;
+
+      transition:.2s;
+
+      color:#0f172a;
+
+    }
+
+    input:focus{
+
+      outline:none;
+
+      border-color:#4f46e5;
+
+      background:white;
+
+      box-shadow:
+      0 0 0 4px rgba(79,70,229,.08);
+
+    }
+
+    input[readonly]{
+
+      background:#eef2ff;
+
+      color:#475569;
+
+      cursor:not-allowed;
+
+    }
+
+    .submit-btn{
+
+      width:100%;
+
+      height:56px;
+
+      border:none;
+
+      border-radius:18px;
+
+      margin-top:10px;
+
+      background:linear-gradient(
+        135deg,
+        #6366f1,
+        #4f46e5
+      );
+
+      color:white;
+
+      font-size:16px;
+
+      font-weight:700;
+
+      cursor:pointer;
+
+      transition:.25s;
+
+      box-shadow:
+      0 12px 25px rgba(79,70,229,.18);
+
+    }
+
+    .submit-btn:hover{
+
+      transform:translateY(-2px);
+
+    }
+
+    #responseMessage{
+
+      margin-top:20px;
+
+      text-align:center;
+
+      font-size:14px;
+
+      font-weight:600;
+
+      color:#dc2626;
+
+      line-height:1.6;
+
+    }
+
+    @media(max-width:600px){
+
+      .container{
+
+        padding:24px 18px;
+
+        border-radius:24px;
+
+      }
+
+      h1{
+
+        font-size:24px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo-box">
+      ₹
+    </div>
+
+    <h1>
+      Add Bank Details
+    </h1>
+
+    <div class="subtitle">
+      Enter your bank account details carefully for withdrawal payments.
+    </div>
+
+    <form id="addBeneficiaryForm">
+
+      <div class="input-group">
+
+        <label for="beneficiaryName">
+          Account Holder Name
+        </label>
+
+        <input
+          type="text"
+          id="beneficiaryName"
+          name="beneficiaryName"
+          placeholder="Enter account holder name"
+          required
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label for="bankAccountNumber">
+          Bank Account Number
+        </label>
+
+        <input
+          type="text"
+          id="bankAccountNumber"
+          name="bankAccountNumber"
+          placeholder="Enter account number"
+          required
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label for="bankIFSC">
+          IFSC Code
+        </label>
+
+        <input
+          type="text"
+          id="bankIFSC"
+          name="bankIFSC"
+          placeholder="Enter IFSC code"
+          required
+        >
+
+      </div>
+
+
+      <div class="input-group">
+
+        <label for="beneficiaryPhone">
+          Mobile Number
+        </label>
+
+        <input
+          type="text"
+          id="beneficiaryPhone"
+          name="beneficiaryPhone"
+          value="<%= mobileNumber %>"
+          readonly
+          required
+        />
+
+      </div>
+
+      <input
+        type="hidden"
+        id="beneficiaryCountryCode"
+        name="beneficiaryCountryCode"
+        value="+91"
+      >
+
+      <button type="submit" class="submit-btn">
+        Add Bank Account
+      </button>
+
+    </form>
+
+    <div id="responseMessage"></div>
+
+  </div>
+
+  <script>
+
+    const form = document.getElementById('addBeneficiaryForm');
+
+    form.addEventListener('submit', async (e) => {
+
+      e.preventDefault();
+
+      const beneficiaryName =
+        document.getElementById('beneficiaryName').value;
+
+      const bankAccountNumber =
+        document.getElementById('bankAccountNumber').value;
+
+      const bankIFSC =
+        document.getElementById('bankIFSC').value;
+
+      const beneficiaryPhone =
+        document.getElementById('beneficiaryPhone').value;
+
+      const beneficiaryCountryCode =
+        document.getElementById('beneficiaryCountryCode').value;
+
+      const beneficiaryDetails = {
+
+        beneficiaryName,
+        bankAccountNumber,
+        bankIFSC,
+        beneficiaryPhone,
+        beneficiaryCountryCode,
+
+      };
+
+      try {
+
+        const response = await fetch('/user/add-beneficiary', {
+
+          method: 'POST',
+
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify(beneficiaryDetails),
+
+        });
+
+       const result = await response.json();
+
+if(response.ok){
+
+    document.getElementById('responseMessage').style.color =
+      '#16a34a';
+
+    document.getElementById('responseMessage').innerText =
+      'Bank account added successfully';
+
+    // Redirect to edit details page
+    setTimeout(() => {
+
+      window.location.href = '/user/edit-details';
+
+    },1200);
+
+}else{
+
+    document.getElementById('responseMessage').style.color =
+      '#dc2626';
+
+    document.getElementById('responseMessage').innerText =
+      result.message || 'Failed to add bank account';
+
+}
+      } catch (error) {
+
+        console.error('Error:', error);
+
+        document.getElementById('responseMessage').innerText =
+          'Error adding beneficiary';
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Monthly Detail</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#f6f8fb;
+    min-height:100vh;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:30px 20px;
+}
+
+h1{
+    font-size:30px;
+    margin-bottom:20px;
+    color:#0f172a;
+}
+
+/* TABLE */
+.table{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#eef2ff;
+    color:#4f46e5;
+    padding:16px;
+    text-align:left;
+}
+
+td{
+    padding:16px;
+    border-top:1px solid #eee;
+}
+
+tr:hover{
+    background:#f9fafb;
+}
+
+.badge{
+    background:#e0f2fe;
+    padding:6px 12px;
+    border-radius:999px;
+    font-weight:600;
+    color:#0284c7;
+    display:inline-block;
+}
+
+a{
+    display:inline-block;
+    margin-bottom:15px;
+    text-decoration:none;
+    color:#6366f1;
+    font-weight:600;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <a href="/admin/bills">← Back to Bills</a>
+
+    <h1>Monthly Report: <%= month %></h1>
+
+    <div class="table">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Scans</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <% for(let day in daily){ %>
+
+                    <tr>
+                        <td><%= day %></td>
+                        <td>
+                            <span class="badge">
+                                <%= daily[day] %>
+                            </span>
+                        </td>
+                    </tr>
+
+                <% } %>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

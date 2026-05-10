@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create QR Codes</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+/* ===== BASE ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* ===== BODY ===== */
+body{
+    font-family:'Inter',sans-serif;
+    background:#f6f8fb;
+    color:#1e293b;
+    overflow-x:hidden;
+    position:relative;
+    min-height:100dvh;
+}
+
+/* ===== BACKGROUND BLOBS ===== */
+.bg{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.5;
+    z-index:0;
+    pointer-events:none;
+}
+
+.bg1{
+    width:320px;
+    height:320px;
+    background:#c7d2fe;
+    top:-100px;
+    left:-100px;
+}
+
+.bg2{
+    width:350px;
+    height:350px;
+    background:#fde68a;
+    bottom:-120px;
+    right:-100px;
+}
+
+.bg3{
+    width:240px;
+    height:240px;
+    background:#bfdbfe;
+    top:40%;
+    left:45%;
+}
+
+/* ===== WRAPPER ===== */
+.wrapper{
+    width:100%;
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px 16px;
+    position:relative;
+    z-index:2;
+}
+
+/* ===== CARD ===== */
+.card{
+    width:100%;
+    max-width:520px;
+    margin:auto;
+    background:rgba(255,255,255,0.78);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.7);
+    border-radius:30px;
+    padding:40px;
+    box-shadow:
+        0 20px 40px rgba(15,23,42,0.08),
+        0 2px 10px rgba(15,23,42,0.04);
+    animation:fade .4s ease;
+}
+
+/* ===== ICON ===== */
+.icon-box{
+    width:78px;
+    height:78px;
+    border-radius:24px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:auto;
+    margin-bottom:24px;
+    background:linear-gradient(135deg,#eef2ff,#e0e7ff);
+    border:1px solid #c7d2fe;
+    color:#4f46e5;
+    font-size:30px;
+}
+
+/* ===== TEXT ===== */
+.card h1{
+    text-align:center;
+    font-size:30px;
+    margin-bottom:10px;
+    color:#0f172a;
+    font-weight:700;
+}
+
+.card p{
+    text-align:center;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:32px;
+}
+
+/* ===== INPUT GROUP ===== */
+.group{
+    margin-bottom:22px;
+}
+
+.group label{
+    display:block;
+    margin-bottom:10px;
+    font-size:14px;
+    color:#475569;
+    font-weight:500;
+}
+
+/* ===== INPUT BOX ===== */
+.input-box{
+    position:relative;
+}
+
+.input-box i{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+    font-size:15px;
+}
+
+.input-box input{
+    width:100%;
+    height:58px;
+    border-radius:18px;
+    border:1px solid #e2e8f0;
+    background:#ffffffd9;
+    padding:0 18px 0 50px;
+    outline:none;
+    font-size:15px;
+    color:#1e293b;
+    transition:.25s;
+}
+
+.input-box input:focus{
+    border-color:#a5b4fc;
+    background:white;
+    box-shadow:0 0 0 4px rgba(99,102,241,.08);
+}
+
+/* ===== BUTTON ===== */
+.submit-btn{
+    width:100%;
+    height:58px;
+    border:none;
+    border-radius:18px;
+    background:linear-gradient(135deg,#818cf8,#6366f1);
+    color:white;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    margin-top:10px;
+    box-shadow:0 10px 20px rgba(99,102,241,.18);
+}
+
+.submit-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 28px rgba(99,102,241,.24);
+}
+
+/* ===== RESULT ===== */
+#qrResult{
+    margin-top:24px;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===== TABLET ===== */
+@media(max-width:768px){
+
+    .wrapper{
+        padding:24px 14px;
+    }
+
+    .card{
+        padding:32px 24px;
+        border-radius:26px;
+    }
+
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:550px){
+
+    .wrapper{
+        align-items:flex-start;
+        padding-top:40px;
+        padding-bottom:40px;
+    }
+
+    .card{
+        padding:26px 20px;
+        border-radius:22px;
+    }
+
+    .card h1{
+        font-size:24px;
+    }
+
+    .card p{
+        font-size:13px;
+        line-height:1.5;
+    }
+
+    .icon-box{
+        width:66px;
+        height:66px;
+        border-radius:20px;
+        font-size:24px;
+        margin-bottom:20px;
+    }
+
+    .input-box input{
+        height:54px;
+        font-size:14px;
+        border-radius:16px;
+    }
+
+    .submit-btn{
+        height:54px;
+        border-radius:16px;
+        font-size:14px;
+    }
+
+}
+
+/* ===== SMALL MOBILE ===== */
+@media(max-width:380px){
+
+    .wrapper{
+        padding:16px 10px;
+    }
+
+    .card{
+        padding:22px 16px;
+    }
+
+    .card h1{
+        font-size:22px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
+<div class="wrapper">
+
+    <div class="card">
+
+        <div class="icon-box">
+            <i class="fas fa-qrcode"></i>
+        </div>
+
+        <h1>Create QR Codes</h1>
+
+        <p>
+            Generate QR batches for your reward system
+        </p>
+
+        <form action="/admin/create-qr" method="POST">
+
+            <div class="group">
+
+                <label for="numQrs">
+                    Number of QR Codes
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fas fa-layer-group"></i>
+
+                    <input
+                        type="number"
+                        id="numQrs"
+                        name="numQrs"
+                        placeholder="Enter quantity"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="group">
+
+                <label for="points">
+                    Points Per QR Code
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fas fa-coins"></i>
+
+                    <input
+                        type="number"
+                        id="points"
+                        name="points"
+                        placeholder="Enter points"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <button class="submit-btn" type="submit">
+                Generate QR Codes
+            </button>
+
+        </form>
+
+        <div id="qrResult"></div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

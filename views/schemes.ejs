@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Current Schemes</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:'Inter',sans-serif;
+
+            background:#f4f7fb;
+
+            min-height:100vh;
+
+            padding:25px;
+
+            color:#0f172a;
+
+        }
+
+        .page-header{
+
+            margin-bottom:30px;
+
+        }
+
+        .page-title{
+
+            font-size:32px;
+
+            font-weight:700;
+
+            color:#111827;
+
+            margin-bottom:8px;
+
+        }
+
+        .page-subtitle{
+
+            color:#64748b;
+
+            font-size:15px;
+
+        }
+
+        .schemes-grid{
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(auto-fit,minmax(320px,1fr));
+
+            gap:22px;
+
+        }
+
+        .scheme-card{
+
+            background:white;
+
+            border-radius:24px;
+
+            padding:24px;
+
+            position:relative;
+
+            overflow:hidden;
+
+            border:1px solid #edf2f7;
+
+            transition:.25s;
+
+            box-shadow:
+            0 10px 30px rgba(15,23,42,0.05);
+
+        }
+
+        .scheme-card:hover{
+
+            transform:translateY(-4px);
+
+        }
+
+        .scheme-badge{
+
+            display:inline-flex;
+
+            align-items:center;
+
+            padding:7px 14px;
+
+            border-radius:999px;
+
+            background:#eef2ff;
+
+            color:#4338ca;
+
+            font-size:12px;
+
+            font-weight:700;
+
+            margin-bottom:16px;
+
+        }
+
+        .scheme-text{
+
+            font-size:15px;
+
+            line-height:1.8;
+
+            color:#334155;
+
+            word-break:break-word;
+
+            margin-bottom:22px;
+
+        }
+
+        .scheme-footer{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            gap:12px;
+
+            margin-top:auto;
+
+        }
+
+        .scheme-date{
+
+            font-size:13px;
+
+            color:#94a3b8;
+
+        }
+
+        .active-status{
+
+            padding:8px 14px;
+
+            border-radius:12px;
+
+            background:#dcfce7;
+
+            color:#166534;
+
+            font-size:12px;
+
+            font-weight:700;
+
+        }
+
+        .empty-box{
+
+            background:white;
+
+            padding:50px 25px;
+
+            border-radius:24px;
+
+            text-align:center;
+
+            color:#64748b;
+
+            font-size:16px;
+
+            box-shadow:
+            0 10px 30px rgba(15,23,42,0.05);
+
+        }
+
+        .pagination{
+
+            margin-top:40px;
+
+            display:flex;
+
+            justify-content:center;
+
+            gap:10px;
+
+            flex-wrap:wrap;
+
+        }
+
+        .pagination a{
+
+            min-width:44px;
+
+            height:44px;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            text-decoration:none;
+
+            border-radius:14px;
+
+            background:white;
+
+            color:#334155;
+
+            font-weight:600;
+
+            box-shadow:
+            0 5px 15px rgba(15,23,42,0.05);
+
+            transition:.2s;
+
+        }
+
+        .pagination a.active{
+
+            background:#4f46e5;
+
+            color:white;
+
+        }
+
+        .pagination a:hover{
+
+            transform:translateY(-2px);
+
+        }
+
+        @media(max-width:768px){
+
+            body{
+
+                padding:18px;
+
+            }
+
+            .page-title{
+
+                font-size:26px;
+
+            }
+
+            .scheme-card{
+
+                padding:20px;
+
+                border-radius:20px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-title">
+            Current Schemes
+        </div>
+
+        <div class="page-subtitle">
+            Explore latest offers, rewards and announcements
+        </div>
+
+    </div>
+
+
+
+    <!-- SCHEMES -->
+
+    <% if (schemes && schemes.length > 0) { %>
+
+        <div class="schemes-grid">
+
+            <% schemes.forEach(function(scheme) { %>
+
+                <div class="scheme-card">
+
+                    <div class="scheme-badge">
+                        ACTIVE SCHEME
+                    </div>
+
+                    <div class="scheme-text">
+                        <%= scheme.text %>
+                    </div>
+
+                    <div class="scheme-footer">
+
+                        <div class="scheme-date">
+
+                            <% if(scheme.timestamp){ %>
+
+                                <%= new Date(scheme.timestamp).toLocaleString() %>
+
+                            <% } %>
+
+                        </div>
+
+                        <div class="active-status">
+                            LIVE
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="empty-box">
+
+            No schemes available right now.
+
+        </div>
+
+    <% } %>
+
+
+
+    <!-- PAGINATION -->
+
+    <% if (totalPages > 1) { %>
+
+        <div class="pagination">
+
+            <% for(let i = 1; i <= totalPages; i++) { %>
+
+                <a
+                    href="/user/schemes?page=<%= i %>"
+                    class="<%= currentPage === i ? 'active' : '' %>"
+                >
+                    <%= i %>
+                </a>
+
+            <% } %>
+
+        </div>
+
+    <% } %>
+
+</body>
+</html>

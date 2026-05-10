@@ -1,0 +1,281 @@
+/* Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none; /* Global underline for links */
+}
+
+
+body {
+    background-color: #F4F7FD; /* Light background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+.dashboard-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    padding-bottom: 80px; /* Added space at the bottom for the action box */
+}
+
+/* Top Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px;
+    margin-bottom: 15px;
+    padding: 5px 20px; /* Reduced padding */
+    position: sticky; /* This makes the top bar stick to the top */
+    top: 0; /* Ensures it's positioned at the top */
+    z-index: 10; /* Makes sure it stays on top of other content when scrolling */
+    background-color: #F4F7FD; /* Same as body background to blend in with the page */
+}
+
+/* Logo */
+.logo {
+    width: 150px;
+    height: auto;
+}
+
+/* Logout Button */
+.logout-btn {
+    background-color: #E74C3C; /* Red color for Logout */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 5px 11px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+}
+
+.logout-btn:hover {
+    background-color: #C0392B; /* Darker red on hover */
+}
+
+/* Logout Icon */
+.logout-icon {
+    width: 20px;
+    height: 20px;
+    filter: invert(1); /* Make the icon white */
+}
+
+/* Greeting Section */
+.greeting {
+    text-align: left;
+    font-size: 1.1em; /* Reduced font size */
+    color: #333333;
+    font-weight: bold;
+    margin-bottom: 10px; /* Reduced space below the greeting */
+}
+
+/* Wallet Balance Section */
+.wallet-section {
+    background-color: #FFFFFF;
+    color: #333333;
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* Make the balance section a column flex container */
+    align-items: center;
+    justify-content: center;
+}
+
+.wallet-section h2 {
+    font-size: 2em;
+    margin: 2px 0;
+    display: flex;
+    align-items: center; /* Aligns rupee symbol and balance correctly */
+}
+
+/* Add this to specifically handle the rupee symbol */
+.wallet-section h2 .rupee-symbol {
+    font-size: 1em; /* Adjust size of the rupee symbol */
+    margin-right: 5px; /* Add space between the rupee symbol and balance */
+}
+
+
+/* Wallet Action Buttons inside the Wallet Section */
+.wallet-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Space between the buttons */
+    width: 100%; /* Ensure buttons take up the full width of the wallet box */
+    margin-top: 5px; /* Add spacing between the balance and buttons */
+}
+
+/* Style for each button */
+.wallet-btn {
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px; /* Adjust padding for better fit */
+    cursor: pointer;
+    font-weight: bold;
+    flex: 1; /* Make buttons take equal width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Space between icon and text */
+    font-size: 0.9em; /* Reduced font size */
+    min-width: 120px; /* Set minimum width to ensure proper sizing */
+    box-sizing: border-box; /* Ensure padding doesn't exceed button's width */
+    text-decoration: none; 
+}
+
+/* Icon size inside the button */
+.wallet-btn img {
+    height: 16px; /* Icon size that matches the text height */
+    width: 16px;  /* Set width proportionally to the height */
+    filter: invert(1); /* Make icon color white */
+}
+
+/* Hover effect for wallet buttons */
+.wallet-btn:hover {
+    background-color: #357ABD; /* Darker shade on hover */
+}
+
+.wallet-btn:hover img {
+    filter: invert(1); /* Make icon fully white on hover */
+}
+
+/* Style for Withdraw Button */
+.withdraw-btn {
+    background-color: #28a745; /* Green color for Withdraw */
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* Hover effect for Withdraw button */
+.withdraw-btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Slider Container */
+.slider {
+    position: relative;
+    width: 100%;
+    height: 150px; /* Adjust the height based on your image size */
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Individual Slides (Images) */
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures images fill the container */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Active Slide */
+.slide.active {
+    opacity: 1;
+}
+
+/* Action Box (Footer) */
+.action-box {
+    background-color: #FFFFFF;
+    border-radius: 0px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Fix the footer at the bottom */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Ensure it stays above other content */
+}
+
+/* Action Button Style */
+.action-btn {
+    background: none;
+    border: none;
+    width: 60px; /* Slightly larger for better spacing */
+    height: 60px;
+    display: flex;
+    flex-direction: column; /* Stack icon and text vertically */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center; /* Center text below icons */
+}
+
+/* Container for the icon and label */
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Icon Style */
+.action-btn img {
+    width: 25px; /* Reduced icon size */
+    height: 25px; /* Set the height to match width */
+    filter: invert(0.5); /* Adjust icon color */
+    margin-bottom: 5px; /* Space between icon and label */
+}
+
+/* Label Style */
+.icon-label {
+    text-decoration: none;
+    font-size: 0.7em; /* Slightly smaller text */
+    color: #333; /* Label color */
+    font-weight: 600; /* Make label text bold */
+    white-space: nowrap; /* Prevent text from wrapping into multiple lines */
+    display: inline-block; /* Ensure it's in-line with other elements */
+    }
+
+
+/* Hover effect for all buttons */
+.action-btn:hover img {
+    filter: invert(1); /* Make icon fully white on hover */
+}
+
+/* Make sure the action box doesn't overlap with content on mobile */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding-bottom: 80px; /* Ensure content doesn't overlap footer */
+    }
+
+    /* Adjust the action box and buttons for mobile */
+    .action-box {
+        padding: 10px;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .action-btn {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+
+
+
+
+
+

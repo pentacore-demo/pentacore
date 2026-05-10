@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banner Management</title>
+  <link rel="stylesheet" href="/admin/banner.css">
+</head>
+<body>
+  <h1>Banner Management</h1>
+
+  <form id="uploadBannerForm" enctype="multipart/form-data">
+    <input type="file" name="banner" required>
+    <button type="submit">Upload Banner</button>
+  </form>
+
+  <h2>Uploaded Banners</h2>
+  <div id="bannerContainer">
+    <% Object.keys(banners).forEach(function(bannerId) { %>
+      <div>
+        <img src="<%= banners[bannerId].url %>" alt="Banner" width="200px">
+        <button onclick="deleteBanner('<%= bannerId %>')">Delete</button>
+      </div>
+    <% }); %>
+  </div>
+
+  <script>
+    // Handle banner deletion
+    async function deleteBanner(bannerId) {
+      const response = await fetch('/admin/delete-banner', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bannerId })
+      });
+
+      const data = await response.json();
+      if (data.message === "Banner deleted successfully") {
+        alert("Banner deleted!");
+        window.location.reload();  // Refresh page after deletion
+      } else {
+        alert("Error deleting banner.");
+      }
+    }
+
+    // Handle banner upload form submission
+    document.getElementById('uploadBannerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('banner', document.querySelector('input[type="file"]').files[0]);
+
+      const response = await fetch('/admin/upload-banner', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      if (data.message === "Banner uploaded successfully") {
+        alert("Banner uploaded!");
+        window.location.reload();  // Refresh page after upload
+      } else {
+        alert("Error uploading banner.");
+      }
+    });
+  </script>
+</body>
+</html>

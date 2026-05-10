@@ -1,0 +1,70 @@
+[
+  {
+    "mobileNumber": "9425191274",
+    "fullName": "Rajesh Jaroli",
+    "dob": "1969-05-15",
+    "userType": "painter",
+    "address": "Neemuch",
+    "pinCode": "458441",
+    "state": "MADHYA PRADESH",
+    "city": "Neemuch",
+    "walletBalance": "20010",
+    "status": "active",
+    "isRegistered": true,
+    "isActive": true
+  },
+  {
+    "mobileNumber": "8989130294",
+    "fullName": "fhgfh",
+    "dob": "2024-11-02",
+    "userType": "painter",
+    "address": "fhfh",
+    "pinCode": "65464",
+    "state": "gdfg",
+    "city": "fhfhf",
+    "walletBalance": 1020,
+    "status": "inactive",
+    "isRegistered": true,
+    "isActive": true
+  },
+  {
+    "mobileNumber": "7999657484",
+    "fullName": "Rajesh Jaroli",
+    "dob": "2024-11-01",
+    "userType": "contractor",
+    "address": "Neemuch",
+    "pinCode": "458441",
+    "state": "Madhya Pradesh",
+    "city": "Neemuch",
+    "walletBalance": 210,
+    "status": "active",
+    "isRegistered": true,
+    "isActive": true
+  },
+  {
+    "mobileNumber": "9691218959",
+    "fullName": "",
+    "dob": "",
+    "userType": "",
+    "address": "",
+    "pinCode": "",
+    "state": "",
+    "city": "",
+    "walletBalance": 0,
+    "status": "active",
+    "isRegistered": false
+  },
+  {
+    "mobileNumber": "8889365428",
+    "fullName": "",
+    "dob": "",
+    "userType": "",
+    "address": "",
+    "pinCode": "",
+    "state": "",
+    "city": "",
+    "walletBalance": 0,
+    "status": "active",
+    "isRegistered": false
+  }
+]
