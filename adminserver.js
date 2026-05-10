@@ -11,7 +11,7 @@ const FormData = require('form-data');
 const adminRouter = express.Router();
 
 const serviceAccount = require(
-  path.join(__dirname, "fir-c1b0e-firebase-adminsdk-fbsvc-ba4d8926e8.json")
+  path.join(__dirname, "fir-c1b0e-firebase-adminsdk-fbsvc-27084d8477.json")
 );
 
 // 🔥 Firebase Admin INIT (safe + correct)
