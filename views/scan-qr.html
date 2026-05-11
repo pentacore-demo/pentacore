@@ -95,7 +95,7 @@ body{
     padding:35px;
 }
 
-/* INFO */
+/* INFO BOX */
 
 .info-box{
     background:#eef2ff;
@@ -113,15 +113,12 @@ body{
     width:100%;
     overflow:hidden;
     border-radius:24px;
-    border:2px solid #e2e8f0;
-    background:white;
     margin-bottom:25px;
 }
 
 /* INPUT */
 
 .input-group{
-    margin-top:10px;
     margin-bottom:22px;
 }
 
@@ -237,14 +234,14 @@ body{
     <div class="card">
 
         <div class="info-box">
-            Point your camera at the QR code to scan instantly or enter the code manually below.
+            Point camera towards QR code or enter code manually below.
         </div>
 
         <!-- CAMERA -->
 
         <div id="reader"></div>
 
-        <!-- MANUAL INPUT -->
+        <!-- MANUAL ENTRY -->
 
         <div class="input-group">
 
@@ -274,6 +271,31 @@ body{
 const statusMessage =
     document.getElementById('status-message');
 
+let html5QrCode = null;
+
+let isProcessing = false;
+
+
+
+// ============================
+// SHOW STATUS
+// ============================
+
+function showMessage(message,type='success'){
+
+    statusMessage.style.display = 'block';
+
+    statusMessage.className =
+        `status-message ${
+            type === 'success'
+                ? 'status-success'
+                : 'status-error'
+        }`;
+
+    statusMessage.textContent = message;
+
+}
+
 
 
 // ============================
@@ -282,20 +304,34 @@ const statusMessage =
 
 async function submitQRCode(qrCode){
 
+    if(isProcessing){
+        return;
+    }
+
     if (!qrCode) {
 
-        statusMessage.style.display = 'block';
-
-        statusMessage.className =
-            'status-message status-error';
-
-        statusMessage.textContent =
-            'Please enter a QR code.';
+        showMessage(
+            'Please enter a QR code.',
+            'error'
+        );
 
         return;
     }
 
+    isProcessing = true;
+
     try {
+
+        // STOP CAMERA IMMEDIATELY
+        // SO SAME QR DOESN'T SCAN AGAIN
+
+        if(html5QrCode){
+
+            try{
+                await html5QrCode.stop();
+            }catch(e){}
+
+        }
 
         const response = await fetch('/user/scan-qr', {
 
@@ -311,38 +347,33 @@ async function submitQRCode(qrCode){
 
         const result = await response.json();
 
-        statusMessage.style.display = 'block';
-
         if(result.success){
 
-            statusMessage.className =
-                'status-message status-success';
-
-            statusMessage.textContent =
-                `${result.message} Points added: ${result.points}`;
+            showMessage(
+                `${result.message} Points added: ${result.points}`,
+                'success'
+            );
 
             document.getElementById('manual-code').value = '';
 
         } else {
 
-            statusMessage.className =
-                'status-message status-error';
+            showMessage(
+                result.message,
+                'error'
+            );
 
-            statusMessage.textContent =
-                result.message;
         }
 
     } catch(error){
 
         console.error(error);
 
-        statusMessage.style.display = 'block';
+        showMessage(
+            'Error scanning QR Code.',
+            'error'
+        );
 
-        statusMessage.className =
-            'status-message status-error';
-
-        statusMessage.textContent =
-            'Error scanning QR Code.';
     }
 
 }
@@ -370,85 +401,80 @@ document
 
 
 // ============================
-// AUTO CAMERA SCANNER
+// AUTO CAMERA START
 // ============================
-
-const html5QrCode = new Html5Qrcode("reader");
 
 async function startScanner(){
 
     try{
+
+        html5QrCode =
+            new Html5Qrcode("reader");
 
         const cameras =
             await Html5Qrcode.getCameras();
 
         if(!cameras || cameras.length === 0){
 
-            statusMessage.style.display = 'block';
-
-            statusMessage.className =
-                'status-message status-error';
-
-            statusMessage.textContent =
-                'No camera found.';
+            showMessage(
+                'No camera found.',
+                'error'
+            );
 
             return;
         }
 
-        let rearCameraId = cameras[0].id;
+        // REAR CAMERA PREFERENCE
 
-        cameras.forEach(camera => {
+        let rearCamera =
+            cameras.find(camera =>
+                camera.label
+                .toLowerCase()
+                .includes('back')
+            );
 
-            const label =
-                camera.label.toLowerCase();
-
-            if(
-                label.includes('back') ||
-                label.includes('rear') ||
-                label.includes('environment')
-            ){
-                rearCameraId = camera.id;
-            }
-
-        });
+        if(!rearCamera){
+            rearCamera = cameras[0];
+        }
 
         await html5QrCode.start(
 
-            rearCameraId,
+            rearCamera.id,
 
             {
-                fps:10,
-                qrbox:250,
-                aspectRatio:1
+                fps:5,
+                qrbox:250
             },
 
             async (decodedText) => {
+
+                if(isProcessing){
+                    return;
+                }
 
                 document
                 .getElementById('manual-code')
                 .value = decodedText;
 
-                await submitQRCode(decodedText);
+                submitQRCode(decodedText);
 
             },
 
             (errorMessage) => {
-                // ignore errors while scanning
+                // Ignore scan errors
             }
 
         );
 
-    }catch(error){
+    }catch(err){
 
-        console.error(error);
+        console.error(err);
 
-        statusMessage.style.display = 'block';
+        showMessage(
+            'Camera permission denied or camera not found.',
+            'error'
+        );
 
-        statusMessage.className =
-            'status-message status-error';
-
-        statusMessage.textContent =
-            'Camera permission denied or camera not available.';
     }
 
 }
@@ -457,11 +483,7 @@ async function startScanner(){
 
 // START CAMERA AUTOMATICALLY
 
-window.addEventListener('load', () => {
-
-    startScanner();
-
-});
+startScanner();
 
 </script>
 
