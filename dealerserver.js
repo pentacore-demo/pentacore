@@ -7,7 +7,7 @@ const https = require("https");
 const dealerRouter = express.Router();
 
 // 👉 PUT YOUR DOWNLOADED FILE HERE
-const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-27084d8477.json');
+const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-052b9da7d2.json');
 
 // 🔥 Firebase Admin INIT (safe + correct)
 if (!admin.apps.length) {
