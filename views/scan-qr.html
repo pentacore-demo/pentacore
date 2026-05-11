@@ -10,6 +10,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<script src="https://unpkg.com/html5-qrcode"></script>
+
 <style>
 
 *{
@@ -93,9 +95,33 @@ body{
     padding:35px;
 }
 
+/* INFO */
+
+.info-box{
+    background:#eef2ff;
+    color:#4338ca;
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:25px;
+    font-size:14px;
+    line-height:1.6;
+}
+
+/* CAMERA */
+
+#reader{
+    width:100%;
+    overflow:hidden;
+    border-radius:24px;
+    border:2px solid #e2e8f0;
+    background:white;
+    margin-bottom:25px;
+}
+
 /* INPUT */
 
 .input-group{
+    margin-top:10px;
     margin-bottom:22px;
 }
 
@@ -164,18 +190,6 @@ body{
     color:#991b1b;
 }
 
-/* INFO BOX */
-
-.info-box{
-    background:#eef2ff;
-    color:#4338ca;
-    padding:18px;
-    border-radius:18px;
-    margin-bottom:25px;
-    font-size:14px;
-    line-height:1.6;
-}
-
 /* MOBILE */
 
 @media(max-width:700px){
@@ -213,7 +227,7 @@ body{
         <h1>Scan QR Code</h1>
 
         <p>
-            Enter your 9-digit QR code manually
+            Camera scanner opens automatically
         </p>
 
     </div>
@@ -223,17 +237,23 @@ body{
     <div class="card">
 
         <div class="info-box">
-            Enter the QR coupon code below to claim your reward points.
+            Point your camera at the QR code to scan instantly or enter the code manually below.
         </div>
+
+        <!-- CAMERA -->
+
+        <div id="reader"></div>
+
+        <!-- MANUAL INPUT -->
 
         <div class="input-group">
 
-            <label>QR Code</label>
+            <label>Enter QR Code Manually</label>
 
             <input
                 type="text"
                 id="manual-code"
-                placeholder="Enter 9-digit QR code"
+                placeholder="Enter QR code"
                 maxlength="20"
             >
 
@@ -251,19 +271,16 @@ body{
 
 <script>
 
-document
-.getElementById('enter-code-btn')
-.addEventListener('click', async () => {
+const statusMessage =
+    document.getElementById('status-message');
 
-    const qrCode =
-        document
-        .getElementById('manual-code')
-        .value
-        .trim();
 
-    const statusMessage =
-        document
-        .getElementById('status-message');
+
+// ============================
+// SUBMIT QR
+// ============================
+
+async function submitQRCode(qrCode){
 
     if (!qrCode) {
 
@@ -327,6 +344,122 @@ document
         statusMessage.textContent =
             'Error scanning QR Code.';
     }
+
+}
+
+
+
+// ============================
+// MANUAL SUBMIT
+// ============================
+
+document
+.getElementById('enter-code-btn')
+.addEventListener('click', async () => {
+
+    const qrCode =
+        document
+        .getElementById('manual-code')
+        .value
+        .trim();
+
+    submitQRCode(qrCode);
+
+});
+
+
+
+// ============================
+// AUTO CAMERA SCANNER
+// ============================
+
+const html5QrCode = new Html5Qrcode("reader");
+
+async function startScanner(){
+
+    try{
+
+        const cameras =
+            await Html5Qrcode.getCameras();
+
+        if(!cameras || cameras.length === 0){
+
+            statusMessage.style.display = 'block';
+
+            statusMessage.className =
+                'status-message status-error';
+
+            statusMessage.textContent =
+                'No camera found.';
+
+            return;
+        }
+
+        let rearCameraId = cameras[0].id;
+
+        cameras.forEach(camera => {
+
+            const label =
+                camera.label.toLowerCase();
+
+            if(
+                label.includes('back') ||
+                label.includes('rear') ||
+                label.includes('environment')
+            ){
+                rearCameraId = camera.id;
+            }
+
+        });
+
+        await html5QrCode.start(
+
+            rearCameraId,
+
+            {
+                fps:10,
+                qrbox:250,
+                aspectRatio:1
+            },
+
+            async (decodedText) => {
+
+                document
+                .getElementById('manual-code')
+                .value = decodedText;
+
+                await submitQRCode(decodedText);
+
+            },
+
+            (errorMessage) => {
+                // ignore errors while scanning
+            }
+
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        statusMessage.style.display = 'block';
+
+        statusMessage.className =
+            'status-message status-error';
+
+        statusMessage.textContent =
+            'Camera permission denied or camera not available.';
+    }
+
+}
+
+
+
+// START CAMERA AUTOMATICALLY
+
+window.addEventListener('load', () => {
+
+    startScanner();
 
 });
 
