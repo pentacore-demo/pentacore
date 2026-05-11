@@ -10,53 +10,24 @@ const multer = require("multer"); // For handling file uploads
 const FormData = require('form-data');
 const adminRouter = express.Router();
 
-const serviceAccount = {
-    type: "service_account",
-    project_id: "fir-c1b0e",
-    private_key_id: "27084d847714ab274676f74288420c353be7b4e7",
+// 👉 PUT YOUR DOWNLOADED FILE HERE
+const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-052b9da7d2.json');
 
-    private_key: `-----BEGIN PRIVATE KEY-----
-MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDzA6IwvHamvbbf
-34THnr44INGeL+45w1zsxRfZaeAyPMvMSTQZ1rxEmdh3HzbHIGTxwghbTMfd6zL9
-RUU2Xs0ihDduyxDFbb9flKPnE7+1ZweX2bEWe/IZODR7cDoyIFlhCY/4Q9OGps2p
-W9tTzYuTeTSckjZvZCgkVtS2UA0lO1ho1aUZNLH4l/yeTQo16zolm1ygqfhflls3
-23Jm+8OhZ/h0uUrsmEFZBo62FylAyMsKZDBYLqSwuGnb9o00Y4PuKytQoEzuIB9L
-/KZdt3zkaEWuPEiYSVqgpjhapFxS+cvVyVufuLuPLaD4DPGoe9rifwfUn1K0rw+3
-uXzUTPvxAgMBAAECggEACdQz5N1VvgQk8Urn/G9W8AwHxNDZRYKgCT8mUH4mefGy
-jnzH4jAPJYX31uDI0hn+nmnQjumWmRe27fG1mglDw8MhDAnWwx15JMNtM6uKHZF6
-uz4SgKXOH3RoaJu1ht4Yr1xeWdZbp/HdyWoazC0FzOOvAiws9NyfF2uTQLWqxAtd
-W7VjZtcMay2d8AXCW9njpderbK2jGiXJjkga1TD/2VAE6HJ5qBPloX5fzdOSOrWT
-KIk8z9sGOyA0/qCEAkkDjobrAH4SLG4ezB3ZEbwsWAMx9uvyny1c+ZkCoKz09YCH
-emlOKdXULNIJbb5W7/FlM4Jk6717+WpUZyrPH+HMZwKBgQD6kDwkEpC52KvZ0kPY
-38lGpOCquXMkDrsAbhVhulInYot1IpjDEboLf5oluQJb8L4uBjxsE1RVD45zfR9n
-41c7uSQSXzqKLRqANlAl+37npLAAC2G9VJn7J/00S6w7mh86v6WCY6Nc7aiqtSCq
-STAp+h/znHBBHP7ZPThwHXPWkwKBgQD4SXdVaJDmJh6J4X7z0KqegstbnZOzbrNX
-iVcptTnWH63pdxlOZ7PyZmN8i65z35hQ69FpUmYyQVhO7fB+fLpmIf6ddPztp2j1
-jDC37+gqEVbTpyGD4ibxAkaoeYQQ/lLbXGSFEo46CF1K4pvIXSYC+ETEpTNuwvlt
-UOMqELPR6wKBgQC/2Zhy9lQiOKi8y6ZvdEok8TGlBwIGZdEBb0in34Xv6iBlu+vD
-0Nrm2vkoURRhWWAE1XmGNvanepXUD8XwQb4VWJkqCAhGrGpSKUQNERgGPa8VGaHo
-2dJc4C2b0SU7LbMjxIHx6GC5Uq+GpdExEYDzYzT7zpiVAqKPq7R/A84iSQKBgQCY
-GsG9lAq4w/+PbpKMoXf1FaGpZZa3pQi/hsbcKUbeU5gCX9EkBEnsJSerhBMCr6cr
-Y9xtjmpHPVrxN7lOc/DpYsgOBD5zBU06qICsHo/3PZoYndndZq1+lmtdCNyMYJG4
-CxkVoPF6wecNWlgfXllMFnZileY1Y8LUYmpYOdU/swKBgQDSkg8QtiD7Qa/05fKO
-YtdVcts8BrQ7YQhy7NHO4JRaOVwiEP4jskuU5BGgF+ezxHyoqzDl7He2lTubfXwC
-TRSGYmf5Hk74cU6P6z6GER/dL7QwVhwbgYCOA/PoDF1eBzdO2asD8hGGilPmeFrz
-lmY9L10kY0S/kMFUkQ4jV98QDg==
------END PRIVATE KEY-----`,
 
-    client_email: "firebase-adminsdk-fbsvc@fir-c1b0e.iam.gserviceaccount.com",
-    client_id: "111465529587918989572",
-};
-
+// 🔥 Firebase Admin INIT (safe + correct)
 if (!admin.apps.length) {
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
+
+        // ⚠️ MUST MATCH serviceAccount project_id
         databaseURL: "https://fir-c1b0e-default-rtdb.asia-southeast1.firebasedatabase.app"
     });
 }
 
+// DB reference
 const db = admin.database();
 
+// Log a success message to confirm the connection
 console.log("Firebase connected successfully!");
 
 
