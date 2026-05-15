@@ -26,7 +26,22 @@ app.use("/dealer", dealerRouter); // Dealer routes
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Homepage Route
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'pentacore.html'));
+});
 
+app.get('/request-demo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'request-demo.html'));
+});
+
+app.get('/about-us', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'about-us.html'));
+});
+
+app.get('/pricing', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'pricing.html'));
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {
