@@ -1,0 +1,648 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About Us — Pentacore</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#050816;
+  color:white;
+  overflow-x:hidden;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+.container{
+  width:100%;
+  max-width:1250px;
+  margin:auto;
+  padding:0 24px;
+}
+
+.bg{
+  position:fixed;
+  width:500px;
+  height:500px;
+  border-radius:50%;
+  filter:blur(130px);
+  z-index:-1;
+}
+
+.bg1{
+  background:#7c3aed;
+  top:-150px;
+  left:-150px;
+  opacity:.22;
+}
+
+.bg2{
+  background:#22d3ee;
+  bottom:-150px;
+  right:-150px;
+  opacity:.15;
+}
+
+header{
+  padding:28px 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.logo-box{
+  width:56px;
+  height:56px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:900;
+}
+
+.logo-text h1{
+  font-size:28px;
+  font-weight:900;
+}
+
+.logo-text p{
+  font-size:12px;
+  letter-spacing:3px;
+  color:#94a3b8;
+}
+
+nav{
+  display:flex;
+  gap:30px;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+  font-size:15px;
+  transition:.3s;
+}
+
+nav a:hover{
+  color:#22d3ee;
+}
+
+.btn{
+  padding:15px 24px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  color:white;
+  text-decoration:none;
+  font-weight:700;
+  box-shadow:0 20px 40px rgba(124,58,237,.3);
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:translateY(-3px);
+}
+
+.hero{
+  padding:90px 0 120px;
+  text-align:center;
+}
+
+.hero-tag{
+  display:inline-block;
+  padding:12px 20px;
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  color:#cbd5e1;
+  margin-bottom:30px;
+  backdrop-filter:blur(12px);
+}
+
+.hero h2{
+  font-size:76px;
+  line-height:1.05;
+  margin-bottom:28px;
+  font-weight:900;
+}
+
+.hero h2 span{
+  background:linear-gradient(90deg,#8b5cf6,#22d3ee);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+  max-width:850px;
+  margin:auto;
+  color:#94a3b8;
+  line-height:1.9;
+  font-size:20px;
+}
+
+.section{
+  padding:110px 0;
+}
+
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:70px;
+  align-items:center;
+}
+
+.card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:34px;
+  padding:42px;
+  backdrop-filter:blur(18px);
+}
+
+.card h3{
+  font-size:42px;
+  margin-bottom:24px;
+}
+
+.card p{
+  color:#94a3b8;
+  line-height:2;
+  font-size:17px;
+}
+
+.visual-box{
+  position:relative;
+  min-height:500px;
+}
+
+.floating-card{
+  position:absolute;
+  background:rgba(15,23,42,.9);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:30px;
+  padding:30px;
+  backdrop-filter:blur(18px);
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+
+.floating-card h4{
+  font-size:20px;
+  margin-bottom:14px;
+}
+
+.floating-card p{
+  color:#94a3b8;
+  line-height:1.8;
+}
+
+.card-1{
+  top:0;
+  left:0;
+  width:300px;
+}
+
+.card-2{
+  right:0;
+  top:120px;
+  width:260px;
+}
+
+.card-3{
+  left:80px;
+  bottom:0;
+  width:320px;
+}
+
+.stats-section{
+  text-align:center;
+}
+
+.stats-title{
+  font-size:56px;
+  margin-bottom:20px;
+}
+
+.stats-title span{
+  background:linear-gradient(90deg,#8b5cf6,#22d3ee);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.stats-desc{
+  color:#94a3b8;
+  max-width:760px;
+  margin:0 auto 60px;
+  line-height:1.9;
+  font-size:18px;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+}
+
+.stat-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:28px;
+  padding:38px 24px;
+  transition:.3s;
+}
+
+.stat-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(124,58,237,.35);
+}
+
+.stat-card h3{
+  font-size:46px;
+  margin-bottom:12px;
+}
+
+.stat-card p{
+  color:#94a3b8;
+}
+
+.values-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+.value-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:30px;
+  padding:38px;
+  transition:.3s;
+}
+
+.value-card:hover{
+  transform:translateY(-6px);
+}
+
+.value-icon{
+  width:74px;
+  height:74px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  margin-bottom:26px;
+}
+
+.value-card h3{
+  font-size:28px;
+  margin-bottom:16px;
+}
+
+.value-card p{
+  color:#94a3b8;
+  line-height:1.9;
+}
+
+.cta{
+  padding:110px 0;
+}
+
+.cta-box{
+  background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(37,99,235,.12));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:40px;
+  padding:70px;
+  text-align:center;
+  backdrop-filter:blur(20px);
+}
+
+.cta-box h2{
+  font-size:60px;
+  margin-bottom:24px;
+}
+
+.cta-box p{
+  max-width:760px;
+  margin:auto auto 40px;
+  color:#94a3b8;
+  line-height:1.9;
+  font-size:18px;
+}
+
+footer{
+  padding:40px 0 60px;
+  text-align:center;
+  color:#64748b;
+}
+
+@media(max-width:1100px){
+
+  .grid-2,
+  .stats-grid,
+  .values-grid{
+    grid-template-columns:1fr;
+  }
+
+  .visual-box{
+    min-height:650px;
+  }
+
+}
+
+@media(max-width:768px){
+
+  header{
+    flex-direction:column;
+    gap:24px;
+  }
+
+  nav{
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .hero h2{
+    font-size:52px;
+  }
+
+  .card h3,
+  .stats-title,
+  .cta-box h2{
+    font-size:38px;
+  }
+
+  .cta-box{
+    padding:40px 28px;
+  }
+
+  .floating-card{
+    position:relative;
+    width:100%;
+    left:auto;
+    right:auto;
+    top:auto;
+    bottom:auto;
+    margin-bottom:20px;
+  }
+
+  .visual-box{
+    min-height:auto;
+  }
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+
+<header class="container">
+
+  <div class="logo">
+
+    <div class="logo-box">P</div>
+
+    <div class="logo-text">
+      <h1>PENTACORE</h1>
+      <p>LOYALTY INFRASTRUCTURE</p>
+    </div>
+
+  </div>
+
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About Us</a>
+    <a href="/pricing">Pricing</a>
+  </nav>
+
+  <a href="/request-demo" class="btn">
+    Book Demo
+  </a>
+
+</header>
+
+<section class="hero">
+
+  <div class="container">
+
+    <div class="hero-tag">
+      Building The Future Of Loyalty Infrastructure
+    </div>
+
+    <h2>
+      About <span>Pentacore</span>
+    </h2>
+
+    <p>
+      Pentacore helps brands build modern QR-powered loyalty ecosystems that strengthen dealer engagement, automate rewards, and deliver real-time business intelligence at scale.
+    </p>
+
+  </div>
+
+</section>
+
+<section class="section">
+
+  <div class="container grid-2">
+
+    <div class="card">
+
+      <h3>
+        Our Mission
+      </h3>
+
+      <p>
+        We believe traditional dealer engagement systems are outdated, fragmented and difficult to scale. Pentacore was created to modernize the way brands interact with distributors, dealers and retailers using secure QR infrastructure, intelligent rewards systems and real-time analytics.
+        <br><br>
+        Our goal is simple — help businesses increase loyalty, improve transparency and create long-term engagement through technology.
+      </p>
+
+    </div>
+
+    <div class="visual-box">
+
+      <div class="floating-card card-1">
+        <h4>QR Infrastructure</h4>
+        <p>
+          Secure QR-based verification and reward systems for large-scale dealer networks.
+        </p>
+      </div>
+
+      <div class="floating-card card-2">
+        <h4>Real-time Analytics</h4>
+        <p>
+          Monitor scans, rewards, transactions and campaign performance instantly.
+        </p>
+      </div>
+
+      <div class="floating-card card-3">
+        <h4>Customer Engagement</h4>
+        <p>
+          Create loyalty ecosystems that improve retention and increase repeat business.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="section stats-section">
+
+  <div class="container">
+
+    <h2 class="stats-title">
+      Trusted By Growing <span>Distribution Networks</span>
+    </h2>
+
+    <p class="stats-desc">
+      Pentacore is designed for brands that need scalable loyalty infrastructure with security, reliability and performance.
+    </p>
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <h3>1M+</h3>
+        <p>QR Scans Processed</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>1K+</h3>
+        <p>Dealer Network Users</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>99.9%</h3>
+        <p>Platform Uptime</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>24/7</h3>
+        <p>System Availability</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="section">
+
+  <div class="container">
+
+    <div style="text-align:center;margin-bottom:70px;">
+
+      <h2 class="stats-title">
+        Our Core <span>Values</span>
+      </h2>
+
+      <p class="stats-desc">
+        Everything we build is focused around reliability, scalability and long-term partnerships.
+      </p>
+
+    </div>
+
+    <div class="values-grid">
+
+      <div class="value-card">
+
+        <div class="value-icon"></div>
+
+        <h3>Innovation</h3>
+
+        <p>
+          We continuously improve our platform to help businesses stay ahead with modern loyalty technology.
+        </p>
+
+      </div>
+
+      <div class="value-card">
+
+        <div class="value-icon"></div>
+
+        <h3>Security</h3>
+
+        <p>
+          Secure QR validation and protected infrastructure ensure safe reward distribution and fraud prevention.
+        </p>
+
+      </div>
+
+      <div class="value-card">
+
+        <div class="value-icon"></div>
+
+        <h3>Scalability</h3>
+
+        <p>
+          Our systems are built to support growing dealer networks and enterprise-level reward campaigns.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="cta">
+
+  <div class="container">
+
+    <div class="cta-box">
+
+      <h2>
+        Ready To Transform Your Dealer Network?
+      </h2>
+
+      <p>
+        Discover how Pentacore can help your business build powerful QR loyalty systems, improve engagement and automate rewards at scale.
+      </p>
+
+      <a href="/request-demo" class="btn">
+        Request A Demo
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+
+  <div class="container">
+    © 2026 Pentacore. All rights reserved.
+  </div>
+
+</footer>
+
+</body>
+</html>
+```
+

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Request Demo — Pentacore</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+  .success-box{
+  text-align:center;
+  padding:40px 10px;
+}
+
+.success-icon{
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 24px;
+  font-size:42px;
+  font-weight:900;
+  box-shadow:0 20px 40px rgba(34,197,94,.25);
+}
+
+.success-box h2{
+  font-size:34px;
+  margin-bottom:16px;
+}
+
+.success-box p{
+  color:#94a3b8;
+  line-height:1.8;
+  font-size:16px;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#050816;
+  color:white;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* BACKGROUND */
+
+.bg{
+  position:fixed;
+  width:500px;
+  height:500px;
+  border-radius:50%;
+  filter:blur(130px);
+  z-index:-1;
+}
+
+.bg1{
+  background:#7c3aed;
+  top:-160px;
+  left:-140px;
+  opacity:.24;
+}
+
+.bg2{
+  background:#22d3ee;
+  bottom:-160px;
+  right:-140px;
+  opacity:.18;
+}
+
+/* LAYOUT */
+
+.wrapper{
+  width:100%;
+  max-width:1250px;
+  display:grid;
+  grid-template-columns:1fr 540px;
+  gap:70px;
+  align-items:center;
+}
+
+/* LEFT */
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:34px;
+}
+
+.logo-box{
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:900;
+}
+
+.logo-text h2{
+  font-size:28px;
+  font-weight:900;
+}
+
+.logo-text p{
+  color:#94a3b8;
+  font-size:12px;
+  letter-spacing:3px;
+}
+
+.left h1{
+  font-size:72px;
+  line-height:1.02;
+  font-weight:900;
+  margin-bottom:30px;
+}
+
+.left h1 span{
+  background:linear-gradient(90deg,#8b5cf6,#22d3ee);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.left p{
+  color:#94a3b8;
+  font-size:20px;
+  line-height:1.9;
+  margin-bottom:42px;
+  max-width:620px;
+}
+
+.stats{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.stat{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  padding:24px;
+  border-radius:26px;
+  min-width:180px;
+  backdrop-filter:blur(12px);
+  transition:.3s;
+}
+
+.stat:hover{
+  transform:translateY(-4px);
+  border-color:rgba(124,58,237,.4);
+}
+
+.stat h3{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.stat p{
+  font-size:14px;
+  margin:0;
+  line-height:1.6;
+}
+
+/* FORM */
+
+.form-box{
+  background:rgba(15,23,42,.82);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:38px;
+  padding:42px;
+  backdrop-filter:blur(20px);
+  box-shadow:0 40px 100px rgba(0,0,0,.45);
+}
+
+.form-box h2{
+  font-size:38px;
+  margin-bottom:10px;
+}
+
+.sub{
+  color:#94a3b8;
+  line-height:1.8;
+  margin-bottom:34px;
+  font-size:15px;
+}
+
+.form-group{
+  margin-bottom:22px;
+}
+
+label{
+  display:block;
+  margin-bottom:10px;
+  color:#cbd5e1;
+  font-size:14px;
+  font-weight:500;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:18px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255, 255, 255, 0.04);
+  color:rgb(0, 0, 0);
+  font-size:15px;
+  outline:none;
+  transition:.3s;
+  font-family:'Inter',sans-serif;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:#64748b;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#7c3aed;
+  box-shadow:0 0 0 4px rgba(124,58,237,.15);
+}
+
+textarea{
+  resize:none;
+  min-height:130px;
+}
+
+button{
+  width:100%;
+  padding:19px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  color:white;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.3s;
+  box-shadow:0 20px 40px rgba(124,58,237,.3);
+}
+
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 30px 50px rgba(124,58,237,.4);
+}
+
+.note{
+  color:#64748b;
+  font-size:13px;
+  text-align:center;
+  margin-top:18px;
+  line-height:1.7;
+}
+
+/* MOBILE */
+
+@media(max-width:1050px){
+
+  .wrapper{
+    grid-template-columns:1fr;
+    gap:50px;
+  }
+
+  .left{
+    text-align:center;
+  }
+
+  .logo{
+    justify-content:center;
+  }
+
+  .left p{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .stats{
+    justify-content:center;
+  }
+
+}
+
+@media(max-width:700px){
+
+  body{
+    padding:30px 16px;
+  }
+
+  .left h1{
+    font-size:50px;
+  }
+
+  .form-box{
+    padding:28px;
+  }
+
+  .form-box h2{
+    font-size:30px;
+  }
+
+  .stats{
+    flex-direction:column;
+  }
+
+  .stat{
+    width:100%;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+
+<div class="wrapper">
+
+  <!-- LEFT SIDE -->
+
+  <div class="left">
+
+    <div class="logo">
+
+      <div class="logo-box">
+        P
+      </div>
+
+      <div class="logo-text">
+        <h2>PENTACORE</h2>
+        <p>LOYALTY INFRASTRUCTURE</p>
+      </div>
+
+    </div>
+
+    <h1>
+      Book A <span>Pentacore Demo</span>
+    </h1>
+
+    <p>
+      Discover how Pentacore helps brands create modern QR loyalty infrastructure, secure reward systems and dealer engagement platforms at scale.
+    </p>
+
+    <div class="stats">
+
+      <div class="stat">
+        <h3>1M+</h3>
+        <p>QR Scans Processed</p>
+      </div>
+
+      <div class="stat">
+        <h3>1K+</h3>
+        <p>Dealer Network Users</p>
+      </div>
+
+      <div class="stat">
+        <h3>99.9%</h3>
+        <p>Platform Uptime</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FORM -->
+
+  <div class="form-box">
+
+    <h2>Request Demo</h2>
+
+    <p class="sub">
+      Fill in your details and our team will contact you shortly with a personalized demo.
+    </p>
+
+    <form action="https://api.web3forms.com/submit" method="POST">
+
+      <!-- WEB3FORMS KEY -->
+
+      <input type="hidden" name="access_key" value="a96b5402-c3bf-4f33-930d-da51066f040a">
+
+      <!-- EMAIL SUBJECT -->
+
+      <input type="hidden" name="subject" value="New Pentacore Demo Request">
+
+      <!-- FROM NAME -->
+
+      <input type="hidden" name="from_name" value="Pentacore Website">
+
+      <!-- HONEYPOT -->
+
+      <input type="checkbox" name="botcheck" style="display:none;">
+
+      <div class="form-group">
+
+        <label>Full Name</label>
+
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter your full name"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Company Name</label>
+
+        <input
+          type="text"
+          name="company"
+          placeholder="Enter company name"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Phone Number</label>
+
+        <input
+          type="tel"
+          name="phone"
+          placeholder="+91 XXXXX XXXXX"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Email Address</label>
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email address"
+          required
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Industry</label>
+
+        <select name="industry">
+
+          <option value="Paint Industry">Paint Industry</option>
+          <option value="Building Materials">Building Materials</option>
+          <option value="Manufacturing">Manufacturing</option>
+          <option value="Distribution">Distribution</option>
+          <option value="Retail">Retail</option>
+          <option value="Other">Other</option>
+
+        </select>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Your Requirements</label>
+
+        <textarea
+          name="message"
+          placeholder="Tell us about your business requirements..."
+          required
+        ></textarea>
+
+      </div>
+
+      <button type="submit">
+        Request Demo
+      </button>
+
+    </form>
+
+    <p class="note">
+      Your information is secure and confidential.
+    </p>
+
+  </div>
+
+</div>
+
+<script>
+
+const form = document.querySelector("form");
+
+form.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const button = form.querySelector("button");
+
+    button.innerHTML = "Submitting...";
+    button.disabled = true;
+
+    const formData = new FormData(form);
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+    });
+
+    const result = await response.json();
+
+    if(result.success){
+
+        form.innerHTML = `
+        
+        <div class="success-box">
+
+            <div class="success-icon">✓</div>
+
+            <h2>Request Submitted</h2>
+
+            <p>
+                Thank you for contacting Pentacore.
+                Our team will contact you shortly.
+            </p>
+
+        </div>
+
+        `;
+
+    } else {
+
+        button.innerHTML = "Request Demo";
+        button.disabled = false;
+
+        alert("Something went wrong. Please try again.");
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
