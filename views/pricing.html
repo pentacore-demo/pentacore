@@ -73,16 +73,11 @@ header{
   gap:14px;
 }
 
-.logo-box{
-  width:56px;
-  height:56px;
+.logo-img{
+  width:68px;
+  height:68px;
+  object-fit:contain;
   border-radius:18px;
-  background:linear-gradient(135deg,#7c3aed,#2563eb);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  font-weight:900;
 }
 
 .logo h1{
@@ -422,17 +417,16 @@ nav a:hover{
 <div class="bg bg2"></div>
 
 <header class="container">
+<div class="logo">
 
-  <div class="logo">
+  <img src="/logo.png" class="logo-img" alt="Pentacore Logo">
 
-    <div class="logo-box">P</div>
-
-    <div>
-      <h1>PENTACORE</h1>
-      <p>SOFTWARE SOLUTIONS</p>
-    </div>
-
+  <div class="logo-text">
+    <h1>PENTACORE</h1>
+    <p>LOYALTY INFRASTRUCTURE</p>
   </div>
+
+</div>
 
   <nav>
     <a href="/">Home</a>
