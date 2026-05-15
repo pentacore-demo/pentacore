@@ -87,36 +87,33 @@ a{
   justify-content:space-between;
 }
 
-.logo{
+
+
+.logo-full{
   display:flex;
   align-items:center;
   gap:14px;
 }
 
-.logo-box{
-  width:50px;
-  height:50px;
-  border-radius:16px;
-  background:linear-gradient(135deg,#7c3aed,#22d3ee);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.logo-full img{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+}
+
+.logo-text h1{
+  font-size:28px;
   font-weight:900;
-  font-size:24px;
-  box-shadow:0 0 30px rgba(124,58,237,.5);
+  line-height:1;
+  letter-spacing:.5px;
 }
 
-.logo h1{
-  font-size:24px;
-  font-weight:800;
-}
-
-.logo p{
+.logo-text p{
   font-size:11px;
   color:#94a3b8;
-  letter-spacing:3px;
+  letter-spacing:4px;
+  margin-top:6px;
 }
-
 .nav-links{
   display:flex;
   gap:38px;
@@ -656,12 +653,16 @@ footer{
 
     <div class="logo">
 
-      <div class="logo-box">P</div>
+     <div class="logo-full">
 
-      <div>
-        <h1>PENTACORE</h1>
-        <p>QR LOYALTY INFRASTRUCTURE</p>
-      </div>
+  <img src="/logo.png" alt="Pentacore Logo">
+
+  <div class="logo-text">
+    <h1>PENTACORE</h1>
+    <p>SOFTWARE SOLUTIONS</p>
+  </div>
+
+</div>
 
     </div>
 
@@ -967,6 +968,8 @@ footer{
 
 <!-- FOOTER -->
 
+<!-- FOOTER -->
+
 <footer>
 
   <div class="container">
@@ -975,13 +978,13 @@ footer{
 
       <div>
 
-        <div class="logo" style="margin-bottom:24px;">
+        <div class="logo-full" style="margin-bottom:24px;">
 
-          <div class="logo-box">P</div>
+          <img src="/logo.png" alt="Pentacore Logo">
 
-          <div>
+          <div class="logo-text">
             <h1>PENTACORE</h1>
-            <p>QR LOYALTY INFRASTRUCTURE</p>
+            <p>LOYALTY INFRASTRUCTURE</p>
           </div>
 
         </div>
@@ -1018,7 +1021,6 @@ footer{
 
         <p>pentacore.support@gmail.com</p>
         <p>pentcore-demo.in</p>
-        
 
       </div>
 
