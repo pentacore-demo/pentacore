@@ -112,16 +112,11 @@ body{
   margin-bottom:34px;
 }
 
-.logo-box{
-  width:58px;
-  height:58px;
+.logo-img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
   border-radius:18px;
-  background:linear-gradient(135deg,#7c3aed,#2563eb);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  font-weight:900;
 }
 
 .logo-text h2{
@@ -354,16 +349,14 @@ button:hover{
 
     <div class="logo">
 
-      <div class="logo-box">
-        P
-      </div>
+  <img src="/logo.png" class="logo-img" alt="Pentacore Logo">
 
-      <div class="logo-text">
-        <h2>PENTACORE</h2>
-        <p>LOYALTY INFRASTRUCTURE</p>
-      </div>
+  <div class="logo-text">
+    <h2>PENTACORE</h2>
+    <p>LOYALTY INFRASTRUCTURE</p>
+  </div>
 
-    </div>
+</div>
 
     <h1>
       Book A <span>Pentacore Demo</span>
