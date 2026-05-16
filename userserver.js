@@ -1,10 +1,14 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
+const RedisStore = require("connect-redis").default;
+const { createClient } = require("redis");
 const bodyParser = require('body-parser');
 const admin = require('firebase-admin');
 const axios = require('axios');
 const userRouter = express.Router();
+
+require('dotenv').config();
 
 // 👉 PUT YOUR DOWNLOADED FILE HERE
 const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-052b9da7d2.json');
@@ -16,7 +20,7 @@ if (!admin.apps.length) {
         credential: admin.credential.cert(serviceAccount),
 
         // ⚠️ MUST MATCH serviceAccount project_id
-        databaseURL: "https://fir-c1b0e-default-rtdb.asia-southeast1.firebasedatabase.app"
+        databaseURL: process.env.FIREBASE_DATABASE_URL
     });
 }
 // Database reference (same name so rest code works)
@@ -24,24 +28,68 @@ const db = admin.database();
 
 
 // Fast2SMS API details
-const FAST2SMS_URL = 'https://www.fast2sms.com/dev/bulkV2';
-const FAST2SMS_API_KEY = 'haltVXGKcRr1psUDTBv8HQWMkw6YJ3moSOgCn5yEfd79NZi2I0c7FQRq5sgLVJWf3HvbS8ICoMty0Bn4'; // Replace with your Fast2SMS API Key
-const SENDER_ID = 'RJHIND';
-const TEMPLATE_ID = '161703'; // Replace with your DLT-approved template ID
+const FAST2SMS_URL = process.env.FAST2SMS_URL;
+const FAST2SMS_API_KEY = process.env.FAST2SMS_API_KEY;
+const SENDER_ID = process.env.SENDER_ID;
+const TEMPLATE_ID = process.env.TEMPLATE_ID;
 
-// Initialize session middleware
-userRouter.use(
-    session({
-        secret: 'your_secret_key',
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            secure: false, // Set to true if using HTTPS
-            httpOnly: true,
-            // maxAge removed for unlimited session duration
-        }
-    })
-);
+
+
+// ===============================
+// REDIS CLIENT
+// ===============================
+
+const redisClient = createClient({
+   url: process.env.REDIS_URL
+});
+
+// REDIS ERROR LOG
+redisClient.on('error', (err) => {
+    console.log('Redis Error:', err);
+});
+
+// CONNECT REDIS
+(async () => {
+    await redisClient.connect();
+    console.log('Redis Connected Successfully');
+})();
+
+// ===============================
+// SESSION SETUP
+// ===============================
+
+userRouter.use(session({
+
+    store: new RedisStore({
+        client: redisClient,
+        prefix: "sess:"
+    }),
+
+    name: "jlpuraskar.sid",
+
+   secret: process.env.SESSION_SECRET,
+
+    resave: false,
+
+    saveUninitialized: false,
+
+    rolling: false,
+
+    unset: 'destroy',
+
+    cookie: {
+
+        secure: false,
+
+        httpOnly: true,
+
+        sameSite: "lax",
+
+        maxAge: 1000 * 60 * 60 * 24 * 60
+
+    }
+
+}));
 
 
 // Middleware
@@ -51,7 +99,11 @@ userRouter.use(express.urlencoded({ extended: true }));
 
 // Middleware to check if the user is logged in and active
 async function isAuthenticated(req, res, next) {
-  if (req.session && req.session.mobileNumber) {
+ if (
+    req.session &&
+    req.session.mobileNumber &&
+    req.session.isLoggedIn
+){
       const mobileNumber = req.session.mobileNumber;
 
       try {
@@ -83,19 +135,36 @@ async function isAuthenticated(req, res, next) {
 
 // OTP Sending Route
 userRouter.post('/send-otp', async (req, res) => {
+
     const { mobileNumber } = req.body;
 
     if (!mobileNumber) {
         return res.status(400).send('Mobile number is required.');
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000); // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
 
     try {
+
         req.session.otp = otp;
         req.session.mobileNumber = mobileNumber;
 
+        await new Promise((resolve, reject) => {
+
+            req.session.save((err) => {
+
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+
+            });
+
+        });
+
         const response = await axios.get(FAST2SMS_URL, {
+
             params: {
                 authorization: FAST2SMS_API_KEY,
                 route: 'dlt',
@@ -104,33 +173,70 @@ userRouter.post('/send-otp', async (req, res) => {
                 variables_values: otp,
                 numbers: mobileNumber
             }
+
         });
 
         if (response.data.return) {
+
             res.status(200).send('OTP sent successfully.');
+
         } else {
+
             res.status(500).send('Failed to send OTP.');
+
         }
+
     } catch (err) {
+
         console.error('Error sending OTP:', err);
+
         res.status(500).send('Error sending OTP.');
+
     }
+
 });
 
 // OTP Verification Route
-userRouter.post('/verify-otp', (req, res) => {
+userRouter.post('/verify-otp', async (req, res) => {
+
     const { otp } = req.body;
 
     if (!otp) {
         return res.status(400).send('OTP is required.');
     }
 
-    if (otp == req.session.otp) {
-        req.session.otp = null; // Clear OTP from session
-        res.status(200).send('OTP verified successfully.');
+    if (Number(otp) === Number(req.session.otp)) {
+
+        const mobileNumber = req.session.mobileNumber;
+
+        req.session.isLoggedIn = true;
+
+        req.session.mobileNumber = mobileNumber;
+
+        delete req.session.otp;
+
+        await new Promise((resolve, reject) => {
+
+            req.session.save((err) => {
+
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+
+            });
+
+        });
+
+        return res.status(200).send('OTP verified successfully.');
+
     } else {
-        res.status(400).send('Invalid OTP. Please try again.');
+
+        return res.status(400).send('Invalid OTP.');
+
     }
+
 });
 
 // Default route: Login page
@@ -795,8 +901,8 @@ userRouter.get('/add-bank', isAuthenticated, async (req, res) => {
 // ===============================
 // CASHFREE KEYS
 // ===============================
-const CLIENT_ID = 'CF508845CTSV55DU10IC73E6MH8G';
-const CLIENT_SECRET = 'cfsk_ma_prod_42ca1b1243aefbee6cfbced2f9d4da89_92ab50a6';
+const CLIENT_ID = process.env.CASHFREE_CLIENT_ID;
+const CLIENT_SECRET = process.env.CASHFREE_CLIENT_SECRET;
 
 
 // ===============================
@@ -1615,6 +1721,20 @@ userRouter.get("/check-ip", async (req, res) => {
     console.error("Error fetching IP:", error.message);
     res.status(500).send("Error fetching IP");
   }
+});
+
+userRouter.get('/check-session', (req, res) => {
+
+    res.json({
+
+        sessionID: req.sessionID,
+
+        session: req.session,
+
+        cookies: req.headers.cookie
+
+    });
+
 });
 
 module.exports = userRouter;
