@@ -77,18 +77,12 @@ userRouter.use(session({
 
     unset: 'destroy',
 
-    cookie: {
-
-        secure: true,
-
-        httpOnly: true,
-
-        sameSite: "none",
-
-        maxAge: 1000 * 60 * 60 * 24 * 60
-
-    }
-
+  cookie: {
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 1000 * 60 * 60 * 24 * 60
+}
 }));
 
 
