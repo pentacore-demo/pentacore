@@ -11,7 +11,7 @@ const path = require('path');
 const app = express();
 
 
-
+app.set('trust proxy', 1)
 
 // Mount admin router under /admin
 app.use('/user', userRouter);
