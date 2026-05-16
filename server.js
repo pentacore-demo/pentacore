@@ -1,6 +1,7 @@
 // server.js
+require("dotenv").config();
+
 const express = require("express");
-const session = require("express-session");
 const adminRouter = require("./adminserver");
 const userRouter = require('./userserver');
 const dealerRouter = require("./dealerserver"); // Import the new dealer server
@@ -11,12 +12,6 @@ const app = express();
 
 
 
-// Configure session globally
-app.use(session({
-    secret: 'your_secret_key',
-    resave: false,
-    saveUninitialized: true
-}));
 
 // Mount admin router under /admin
 app.use('/user', userRouter);
