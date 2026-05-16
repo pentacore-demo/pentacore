@@ -79,7 +79,7 @@ userRouter.use(session({
 
     cookie: {
 
-        secure: false,
+        secure: true,
 
         httpOnly: true,
 
