@@ -3,16 +3,25 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const QRCode = require("qrcode");
 const admin = require('firebase-admin');
+const session = require("express-session");
 const fs = require('fs');
 const archiver = require("archiver"); // To create ZIP files
 const axios = require("axios"); // To make HTTP requests to ImageBB
 const multer = require("multer"); // For handling file uploads
 const FormData = require('form-data');
+const crypto = require("crypto");
+const rateLimit = require("express-rate-limit");
 const adminRouter = express.Router();
 
 // 👉 PUT YOUR DOWNLOADED FILE HERE
 const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-052b9da7d2.json');
 
+const adminLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200
+});
+
+adminRouter.use(adminLimiter);
 
 // 🔥 Firebase Admin INIT (safe + correct)
 if (!admin.apps.length) {
@@ -37,42 +46,43 @@ adminRouter.use(bodyParser.urlencoded({ extended: true }));
 adminRouter.use(bodyParser.json());
 
 // ========================================
+// SESSION CONFIG (ADMIN)
+// ========================================
+adminRouter.use(session({
+    secret: process.env.SESSION_SECRET || "admin_secret_key_123",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false, // set TRUE only in HTTPS production
+        maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
+}));
+
+// ========================================
 // ADMIN AUTH MIDDLEWARE
 // ========================================
-
 function checkAdminAuth(req, res, next) {
 
-    // Routes allowed without login
     const publicRoutes = [
-        '/login',
-        '/logout'
+        "/login",
+        "/logout"
     ];
 
-    // Allow public routes
+    // allow public routes
     if (publicRoutes.includes(req.path)) {
-
         return next();
-
     }
 
-    // Check session
-    if (
-        !req.session ||
-        !req.session.loggedIn
-    ) {
-
-        return res.redirect('/admin/login');
-
+    // session check
+    if (!req.session || !req.session.adminLoggedIn) {
+        return res.redirect("/admin/login");
     }
 
     next();
-
 }
 
-
-
-// APPLY TO ALL ADMIN ROUTES
-
+// apply middleware
 adminRouter.use(checkAdminAuth);
 
 // Directory where batches are stored (kept as is for consistency)
@@ -118,44 +128,43 @@ adminRouter.get("/login", (req, res) => {
 adminRouter.post("/login", (req, res) => {
     const { email, password } = req.body;
 
-    if (email === "admin@example.com" && password === "password123") {
-        req.session.loggedIn = true;
-        res.redirect("/admin/home");
-    } else {
-        res.redirect("/admin/login");
-    }
-});
+    const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+
+        req.session.adminLoggedIn = true;
+        req.session.adminEmail = email;
+
+        return res.redirect("/admin/home");
+    }
+
+    return res.redirect("/admin/login");
+});
 // Protect the /home route
 adminRouter.get("/home", (req, res) => {
-    if (req.session.loggedIn) {
-        res.sendFile(path.join(__dirname, "views", "home.html"));
-    } else {
-        res.redirect("/admin/login");
+    if (req.session.adminLoggedIn) {
+        return res.sendFile(path.join(__dirname, "views", "home.html"));
     }
+    return res.redirect("/admin/login");
 });
 
 adminRouter.get("/logout", (req, res) => {
-    if (req.session) {
-        req.session.destroy((err) => {
-            if (err) {
-                console.log("Session destroy error:", err);
-                return res.redirect("/admin/login");
-            }
+    req.session.destroy((err) => {
+        if (err) {
+            console.log("Session destroy error:", err);
+        }
 
-            res.clearCookie("connect.sid"); // important
-            return res.redirect("/admin/login");
-        });
-    } else {
+        res.clearCookie("connect.sid");
         return res.redirect("/admin/login");
-    }
+    });
 });
 
-const { ref, set } = require("firebase-admin/database");
+
 
 // Serve the QR code creation page
 adminRouter.get("/create-qr", (req, res) => {
-    if (req.session.loggedIn) {
+    if (req.session.adminLoggedIn) {
         res.sendFile(path.join(__dirname, "views", "create-qr.html"));
     } else {
         res.redirect("/admin/login");
@@ -445,7 +454,7 @@ h1{
 });
 // Serve the home page (admin dashboard)
 adminRouter.get("/", (req, res) => {
-    if (req.session.loggedIn) {
+    if (req.session.adminLoggedIn) {
         res.redirect("/home");
     } else {
         res.redirect("/login");
@@ -456,9 +465,9 @@ adminRouter.get("/", (req, res) => {
 // ================= VIEW ALL BATCHES =================
 adminRouter.get("/view-qr", async (req, res) => {
 
-    if (!req.session.loggedIn) {
-        return res.redirect("/admin/login");
-    }
+  if (!req.session.adminLoggedIn) {
+    return res.redirect("/admin/login");
+}
 
     try {
 
@@ -551,7 +560,11 @@ adminRouter.get("/view-qr/:batchId", async (req, res) => {
 // ================= EDIT QR POINTS =================
 adminRouter.put("/edit-qr/:qrCode", async (req, res) => {
     const qrCode = req.params.qrCode;
-    const newPoints = req.body.points;
+    const newPoints = Number(req.body.points);
+
+if (!Number.isFinite(newPoints)) {
+    return res.status(400).send("Invalid points");
+}
 
     try {
         const snapshot = await db.ref("batches").get();
@@ -723,7 +736,8 @@ adminRouter.get("/download-batch/:batchId", async (req, res) => {
 // PUT route to handle batch point update
 adminRouter.put('/edit-batch/:batchId', async (req, res) => {
     const batchId = req.params.batchId;
-    const newPoints = req.body.points; // Points are passed in the request body
+   const newPoints = Number(req.body.points);
+
 
     // Check if the points are valid
     if (!newPoints || isNaN(newPoints)) {
@@ -772,7 +786,7 @@ adminRouter.delete("/delete-batch/:batchId", async (req, res) => {
     const { password } = req.body;  // Get the password from the request body
 
     // Check if password is correct
-    const correctPassword = "1234";  // Password to delete the batch
+   const correctPassword = process.env.DELETE_PASSWORD; // Password to delete the batch
     if (password !== correctPassword) {
         return res.status(403).send({ success: false, message: "Invalid password." });
     }
@@ -1524,9 +1538,13 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, 'uploads/');
     },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    }
+   filename: (req, file, cb) => {
+  const safeName =
+    crypto.randomBytes(16).toString("hex") +
+    path.extname(file.originalname);
+
+  cb(null, safeName);
+}
   });
   
   const upload = multer({ storage: storage });
@@ -1534,8 +1552,8 @@ const storage = multer.diskStorage({
 
 // POST endpoint for adding a beneficiary
 // Your Cashfree credentials
-const CLIENT_ID = 'CF508845CTSV55DU10IC73E6MH8G';
-const CLIENT_SECRET = 'cfsk_ma_prod_42ca1b1243aefbee6cfbced2f9d4da89_92ab50a6';
+const CLIENT_ID = process.env.CASHFREE_CLIENT_ID;
+const CLIENT_SECRET = process.env.CASHFREE_CLIENT_SECRET;
 
 // Function to fetch transfer status from Cashfree
 async function fetchStatusFromCashfree(transferId) {
@@ -2192,7 +2210,7 @@ adminRouter.post("/withdraw/:month", async (req, res) => {
         const month = req.params.month;
 
         // PASSWORD CHECK
-        if (password !== "123456") {
+        if (password !== process.env.WITHDRAW_PASSWORD) {
 
             return res.json({
 
