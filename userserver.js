@@ -83,7 +83,7 @@ userRouter.use(session({
 
         httpOnly: true,
 
-        sameSite: "lax",
+        sameSite: "none",
 
         maxAge: 1000 * 60 * 60 * 24 * 60
 
