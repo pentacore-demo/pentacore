@@ -1,191 +1,552 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JL Puraskar Dealer Portal</title>
-    <link rel="stylesheet" href="/admin/dealer-dashboard.css">
-    <script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <style>
-        #preview {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transform: rotate(-90deg);
-            transform-origin: center; /*
-            transform: scaleX(1); /* Default to no mirroring */
-            transform-origin: center;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        #camera-status {
-            color: #f00;
-            font-size: 16px;
-        }
+<title>JL Puraskar Dealer Portal</title>
 
-        .toggle-camera-btn {
-            margin-top: 10px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-        #camera-container {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-            max-width: 100%;
-            height: 400px;
-            margin-bottom: 20px;
-        }
+<script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 
-        .container {
-            text-align: center;
-            padding: 20px;
-            max-width: 500px;
-            margin: auto;
-        }
+<style>
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+/* ===== BASE ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        input[type="text"] {
-            width: 80%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #d7ccc8;
-            border-radius: 5px;
-            font-size: 1rem;
-            color: #3e2723;
-            outline: none;
-        }
+body{
+    font-family:'Inter',sans-serif;
+    background:#f6f8fb;
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+}
 
-        button {
-            width: 80%;
-            padding: 12px;
-            background: #5b3a29;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            color: #f5f5dc;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+/* ===== BACKGROUND BLOBS ===== */
+.bg{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.5;
+    z-index:0;
+}
 
-        button:hover {
-            background: #3e2723;
-        }
+.bg1{
+    width:300px;
+    height:300px;
+    background:#c7d2fe;
+    top:-80px;
+    left:-80px;
+}
 
-        .details {
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            color: #5b3a29;
-            text-align: left;
-        }
+.bg2{
+    width:350px;
+    height:350px;
+    background:#fde68a;
+    bottom:-120px;
+    right:-100px;
+}
 
-        #loading {
-            display: none;
-        }
-    </style>
+.bg3{
+    width:250px;
+    height:250px;
+    background:#bfdbfe;
+    top:40%;
+    left:45%;
+}
+
+/* ===== WRAPPER ===== */
+.wrapper{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    position:relative;
+    z-index:2;
+}
+
+/* ===== CARD ===== */
+.dashboard-card{
+    width:100%;
+    max-width:520px;
+    background:rgba(255,255,255,0.78);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.7);
+    border-radius:28px;
+    padding:35px;
+    box-shadow:
+        0 20px 40px rgba(15,23,42,0.08),
+        0 2px 10px rgba(15,23,42,0.04);
+    animation:fade .4s ease;
+    position:relative;
+}
+
+/* ===== LOGOUT ===== */
+.logout-form{
+    position:absolute;
+    top:20px;
+    right:20px;
+}
+
+.logout-btn{
+    border:none;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    cursor:pointer;
+    color:#475569;
+    font-size:16px;
+    transition:.25s;
+}
+
+.logout-btn:hover{
+    background:#f8fafc;
+    transform:translateY(-2px);
+}
+
+/* ===== LOGO ===== */
+.logo{
+    width:72px;
+    height:72px;
+    border-radius:22px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:auto;
+    margin-bottom:22px;
+    font-size:28px;
+    color:#4f46e5;
+    background:linear-gradient(135deg,#eef2ff,#e0e7ff);
+    border:1px solid #c7d2fe;
+}
+
+/* ===== TEXT ===== */
+.dashboard-card h1{
+    text-align:center;
+    font-size:30px;
+    color:#0f172a;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.dashboard-card p{
+    text-align:center;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:30px;
+}
+
+/* ===== CAMERA ===== */
+#camera-container{
+    position:relative;
+    width:100%;
+    height:350px;
+    border-radius:24px;
+    overflow:hidden;
+    background:#e2e8f0;
+    margin-bottom:20px;
+}
+
+#preview{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+#camera-status{
+    position:absolute;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(15,23,42,0.7);
+    color:white;
+    padding:8px 16px;
+    border-radius:999px;
+    font-size:13px;
+    backdrop-filter:blur(8px);
+}
+
+.toggle-camera-btn{
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:48px;
+    height:48px;
+    border:none;
+    border-radius:16px;
+    background:rgba(255,255,255,0.9);
+    color:#334155;
+    font-size:18px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.toggle-camera-btn:hover{
+    transform:rotate(180deg);
+}
+
+/* ===== INPUT ===== */
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-box{
+    position:relative;
+}
+
+.input-box i{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+    font-size:15px;
+}
+
+.input-box input{
+    width:100%;
+    height:56px;
+    border-radius:16px;
+    border:1px solid #e2e8f0;
+    background:#ffffffcc;
+    padding:0 18px 0 48px;
+    font-size:15px;
+    color:#1e293b;
+    outline:none;
+    transition:.25s;
+}
+
+.input-box input:focus{
+    border-color:#a5b4fc;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(99,102,241,.08);
+}
+
+/* ===== BUTTON ===== */
+.action-btn{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(135deg,#818cf8,#6366f1);
+    color:white;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    margin-top:5px;
+    box-shadow:0 10px 20px rgba(99,102,241,.18);
+}
+
+.action-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px rgba(99,102,241,.25);
+}
+
+/* ===== LOADING ===== */
+#loading{
+    display:none;
+    text-align:center;
+    margin-top:18px;
+    color:#6366f1;
+    font-weight:600;
+}
+
+/* ===== DETAILS ===== */
+.details{
+    margin-top:22px;
+    padding:24px;
+    background:#ffffffcc;
+    border-radius:22px;
+    border:1px solid #e2e8f0;
+    color:#334155;
+    line-height:1.8;
+}
+
+.details h2{
+    margin-bottom:12px;
+    color:#0f172a;
+    font-size:22px;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:600px){
+
+    .dashboard-card{
+        padding:24px 18px;
+        border-radius:24px;
+    }
+
+    .dashboard-card h1{
+        font-size:25px;
+    }
+
+    .logo{
+        width:65px;
+        height:65px;
+        font-size:24px;
+    }
+
+    #camera-container{
+        height:300px;
+    }
+
+}
+
+</style>
 </head>
+
 <body>
-    <div class="container">
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
+<div class="wrapper">
+
+    <div class="dashboard-card">
+
+        <!-- Logout -->
+        <form class="logout-form" action="/dealer/logout" method="POST">
+            <button class="logout-btn" type="submit">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </form>
+
+        <!-- Logo -->
+        <div class="logo">
+            <i class="fas fa-qrcode"></i>
+        </div>
+
+        <h1>Dealer Portal</h1>
+
+        <p>
+            Scan or enter QR code to fetch details
+        </p>
+
+        <!-- Camera -->
         <div id="camera-container">
-            <video id="preview" width="100%" height="auto"></video>
-            <button class="toggle-camera-btn" id="toggleCameraBtn">🔄</button>
-            <p id="camera-status">Initializing camera...</p>
+
+            <video id="preview"></video>
+
+            <button
+                class="toggle-camera-btn"
+                id="toggleCameraBtn"
+                type="button"
+            >
+                <i class="fas fa-sync-alt"></i>
+            </button>
+
+            <div id="camera-status">
+                Initializing camera...
+            </div>
+
         </div>
 
-        <div class="form-group">
-            <label for="qrCodeInput">9-Digit QR Code:</label>
-            <input type="text" id="qrCodeInput" placeholder="Enter QR Code" maxlength="9" required>
+        <!-- Input -->
+        <div class="input-group">
+            <div class="input-box">
+
+                <i class="fas fa-hashtag"></i>
+
+                <input
+                    type="text"
+                    id="qrCodeInput"
+                    placeholder="Enter 9 Digit QR Code"
+                    maxlength="9"
+                    required
+                >
+
+            </div>
         </div>
 
-        <button onclick="getQRCodeDetails()">Get QR Code Details</button>
+        <!-- Button -->
+        <button
+            class="action-btn"
+            onclick="getQRCodeDetails()"
+        >
+            Get QR Code Details
+        </button>
 
-        <div id="loading">Loading...</div>
+        <!-- Loading -->
+        <div id="loading">
+            Loading...
+        </div>
+
+        <!-- Result -->
         <div id="qrDetails" class="details"></div>
+
     </div>
 
-    <script>
-        let currentCameraIndex = 0;
-        let scanner;
+</div>
 
-        async function startCamera() {
-            try {
-                scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+<script>
 
-                const cameras = await Instascan.Camera.getCameras();
-                if (cameras.length > 0) {
-                    const selectedCamera = cameras[currentCameraIndex % cameras.length];
+let currentCameraIndex = 0;
+let scanner;
 
-                    // Apply mirroring for front cameras
-                    document.getElementById('preview').style.transform = selectedCamera.facing === 'user' ? 'scaleX(-1)' : 'scaleX(1)';
+async function startCamera() {
 
-                    await scanner.start(selectedCamera);
-                    document.getElementById('camera-status').textContent = "Scanning QR Code...";
+    try {
 
-                    scanner.addListener('scan', function (qrCode) {
-                        document.getElementById('qrCodeInput').value = qrCode;
-                        getQRCodeDetails();
-                    });
-                } else {
-                    document.getElementById('camera-status').textContent = "No cameras found.";
-                }
-            } catch (error) {
-                document.getElementById('camera-status').textContent = `Error: ${error.message}`;
-            }
+        scanner = new Instascan.Scanner({
+
+            video: document.getElementById('preview')
+
+        });
+
+        const cameras =
+            await Instascan.Camera.getCameras();
+
+        if (cameras.length > 0) {
+
+            const selectedCamera =
+                cameras[currentCameraIndex % cameras.length];
+
+            document.getElementById('preview').style.transform =
+                selectedCamera.facing === 'user'
+                ? 'scaleX(-1)'
+                : 'scaleX(1)';
+
+            await scanner.start(selectedCamera);
+
+            document.getElementById('camera-status').textContent =
+                "Scanning QR Code...";
+
+            scanner.addListener('scan', function (qrCode) {
+
+                document.getElementById('qrCodeInput').value =
+                    qrCode;
+
+                getQRCodeDetails();
+
+            });
+
+        } else {
+
+            document.getElementById('camera-status').textContent =
+                "No cameras found.";
+
         }
 
-        function toggleCamera() {
-            currentCameraIndex++;
-            if (scanner) scanner.stop();
-            startCamera();
-        }
+    } catch (error) {
 
-        async function getQRCodeDetails() {
-            const qrCode = document.getElementById('qrCodeInput').value.trim();
-            if (qrCode.length === 9) {
-                document.getElementById('loading').style.display = 'block';
-                document.getElementById('qrDetails').innerHTML = '';
+        document.getElementById('camera-status').textContent =
+            `Error: ${error.message}`;
 
-                try {
-                    const response = await fetch(`/dealer/get-qr-details/${qrCode}`);
-                    const data = await response.json();
+    }
 
-                    document.getElementById('loading').style.display = 'none';
+}
 
-                    if (data.success) {
-                        document.getElementById('qrDetails').innerHTML = `
-                            <h2>QR Code Details</h2>
-                            <p><strong>QR Code:</strong> ${data.qrCode}</p>
-                            <p><strong>QR Batch:</strong> ${data.qrBatch}</p>
-                            <p><strong>Scanned by:</strong> ${data.scannedBy}</p>
-                            <p><strong>Mobile Number:</strong> ${data.mobileNumber}</p>
-                            <p><strong>Scan Date:</strong> ${data.scanDate}</p>
-                            <p><strong>Transaction Amount:</strong> ₹${data.transactionAmount}</p>
-                        `;
-                    } else {
-                        document.getElementById('qrDetails').innerHTML = `<p>No data found for this QR Code.</p>`;
-                    }
-                } catch (error) {
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('qrDetails').innerHTML = `<p>Error fetching details. Please try again.</p>`;
-                }
+function toggleCamera() {
+
+    currentCameraIndex++;
+
+    if (scanner) scanner.stop();
+
+    startCamera();
+
+}
+
+async function getQRCodeDetails() {
+
+    const qrCode =
+        document.getElementById('qrCodeInput')
+        .value
+        .trim();
+
+    if (qrCode.length === 9) {
+
+        document.getElementById('loading').style.display =
+            'block';
+
+        document.getElementById('qrDetails').innerHTML = '';
+
+        try {
+
+            const response =
+                await fetch(`/dealer/get-qr-details/${qrCode}`);
+
+            const data = await response.json();
+
+            document.getElementById('loading').style.display =
+                'none';
+
+            if (data.success) {
+
+                document.getElementById('qrDetails').innerHTML = `
+
+                    <h2>QR Code Details</h2>
+
+                    <p><strong>QR Code:</strong> ${data.qrCode}</p>
+
+                    <p><strong>QR Batch:</strong> ${data.qrBatch}</p>
+
+                    <p><strong>Scanned By:</strong> ${data.scannedBy}</p>
+
+                    <p><strong>Mobile Number:</strong> ${data.mobileNumber}</p>
+
+                    <p><strong>Scan Date:</strong> ${data.scanDate}</p>
+
+                    <p><strong>Transaction Amount:</strong> ₹${data.transactionAmount}</p>
+
+                `;
+
             } else {
-                alert("Please enter a valid 9-digit QR code.");
+
+                document.getElementById('qrDetails').innerHTML = `
+                    <p>No data found for this QR Code.</p>
+                `;
+
             }
+
+        } catch (error) {
+
+            document.getElementById('loading').style.display =
+                'none';
+
+            document.getElementById('qrDetails').innerHTML = `
+                <p>Error fetching details. Please try again.</p>
+            `;
+
         }
 
-        document.getElementById('toggleCameraBtn').addEventListener('click', toggleCamera);
-        window.onload = startCamera;
-    </script>
+    } else {
+
+        alert("Please enter a valid 9-digit QR code.");
+
+    }
+
+}
+
+document.getElementById('toggleCameraBtn')
+.addEventListener('click', toggleCamera);
+
+window.onload = startCamera;
+
+</script>
+
 </body>
 </html>
-
