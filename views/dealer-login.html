@@ -1,25 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dealer Login</title>
-    <link rel="stylesheet" href="/admin/dealer-login.css">
-</head>
-<body>
-    <div class="container">
-        <!-- Blinking Line -->
-        <div class="blinking-line">Welcome to JL Puraskar Dealer Portal</div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- Heading -->
+<title>Dealer Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+
+/* ===== BASE ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#f6f8fb;
+    min-height:100vh;
+    overflow:hidden;
+    position:relative;
+}
+
+/* ===== BACKGROUND BLOBS ===== */
+.bg{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.5;
+    z-index:0;
+}
+
+.bg1{
+    width:300px;
+    height:300px;
+    background:#c7d2fe;
+    top:-80px;
+    left:-80px;
+}
+
+.bg2{
+    width:350px;
+    height:350px;
+    background:#bbf7d0;
+    bottom:-120px;
+    right:-100px;
+}
+
+.bg3{
+    width:250px;
+    height:250px;
+    background:#bfdbfe;
+    top:40%;
+    left:45%;
+}
+
+/* ===== WRAPPER ===== */
+.wrapper{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    position:relative;
+    z-index:2;
+}
+
+/* ===== LOGIN CARD ===== */
+.login-card{
+    width:100%;
+    max-width:430px;
+    background:rgba(255,255,255,0.78);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.7);
+    border-radius:28px;
+    padding:40px;
+    box-shadow:
+        0 20px 40px rgba(15,23,42,0.08),
+        0 2px 10px rgba(15,23,42,0.04);
+    animation:fade .4s ease;
+}
+
+/* ===== LOGO ===== */
+.logo{
+    width:72px;
+    height:72px;
+    border-radius:22px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:auto;
+    margin-bottom:22px;
+    font-size:28px;
+    color:#16a34a;
+    background:linear-gradient(135deg,#dcfce7,#bbf7d0);
+    border:1px solid #86efac;
+}
+
+/* ===== TEXT ===== */
+.login-card h1{
+    text-align:center;
+    font-size:30px;
+    color:#0f172a;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.subtitle{
+    text-align:center;
+    color:#64748b;
+    font-size:14px;
+    margin-bottom:28px;
+    line-height:1.6;
+}
+
+/* ===== BLINKING LINE ===== */
+.blinking-line{
+    text-align:center;
+    margin-bottom:24px;
+    padding:12px 18px;
+    border-radius:14px;
+    background:#ecfdf5;
+    color:#15803d;
+    font-size:14px;
+    font-weight:600;
+    border:1px solid #bbf7d0;
+    animation:blink 1.5s infinite;
+}
+
+/* ===== INPUTS ===== */
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-box{
+    position:relative;
+}
+
+.input-box i{
+    position:absolute;
+    left:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+    font-size:15px;
+}
+
+.input-box input{
+    width:100%;
+    height:56px;
+    border-radius:16px;
+    border:1px solid #e2e8f0;
+    background:#ffffffcc;
+    padding:0 18px 0 48px;
+    font-size:15px;
+    color:#1e293b;
+    outline:none;
+    transition:.25s;
+}
+
+.input-box input:focus{
+    border-color:#86efac;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(34,197,94,.08);
+}
+
+/* ===== LOGIN BUTTON ===== */
+.login-btn{
+    width:100%;
+    height:56px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:white;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+    margin-top:10px;
+    box-shadow:0 10px 20px rgba(34,197,94,.18);
+}
+
+.login-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px rgba(34,197,94,.25);
+}
+
+/* ===== FOOTER ===== */
+.footer{
+    margin-top:24px;
+    text-align:center;
+    color:#94a3b8;
+    font-size:13px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes blink{
+    0%{
+        opacity:1;
+    }
+    50%{
+        opacity:.55;
+    }
+    100%{
+        opacity:1;
+    }
+}
+
+/* ===== MOBILE ===== */
+@media(max-width:500px){
+
+    .login-card{
+        padding:28px 22px;
+        border-radius:24px;
+    }
+
+    .login-card h1{
+        font-size:25px;
+    }
+
+    .logo{
+        width:65px;
+        height:65px;
+        font-size:24px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg bg1"></div>
+<div class="bg bg2"></div>
+<div class="bg bg3"></div>
+
+<div class="wrapper">
+
+    <div class="login-card">
+
+        <div class="logo">
+            <i class="fas fa-store"></i>
+        </div>
+
+        <div class="blinking-line">
+            Welcome to JL Puraskar Dealer Portal
+        </div>
+
         <h1>Dealer Login</h1>
 
-        <!-- Login Form -->
+        <div class="subtitle">
+            Login to access dealer dashboard
+        </div>
+
         <form action="/dealer/login" method="POST">
-            <input type="text" name="userId" placeholder="User ID" required> <!-- Changed to userId -->
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+
+            <div class="input-group">
+                <div class="input-box">
+
+                    <i class="fas fa-user"></i>
+
+                    <input
+                        type="text"
+                        name="userId"
+                        placeholder="Enter User ID"
+                        required
+                    >
+
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="input-box">
+
+                    <i class="fas fa-lock"></i>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter Password"
+                        required
+                    >
+
+                </div>
+            </div>
+
+            <button class="login-btn" type="submit">
+                Login to Dashboard
+            </button>
+
         </form>
+
+        <div class="footer">
+            Secure Dealer Access
+        </div>
+
     </div>
+
+</div>
+
 </body>
 </html>
