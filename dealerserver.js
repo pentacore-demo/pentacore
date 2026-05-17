@@ -1,169 +1,551 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const expressSession = require("express-session");
-const admin = require('firebase-admin');
+const session = require("express-session");
+const admin = require("firebase-admin");
 const https = require("https");
+const rateLimit = require("express-rate-limit");
+
+const RedisStore = require("connect-redis").default;
+const { createClient } = require("redis");
+
+require("dotenv").config();
+
 const dealerRouter = express.Router();
 
-// 👉 PUT YOUR DOWNLOADED FILE HERE
-const serviceAccount = require('./fir-c1b0e-firebase-adminsdk-fbsvc-052b9da7d2.json');
+// ========================================
+// FIREBASE INIT
+// ========================================
 
-// 🔥 Firebase Admin INIT (safe + correct)
+const serviceAccount = require("./fir-c1b0e-firebase-adminsdk-fbsvc-052b9da7d2.json");
+
 if (!admin.apps.length) {
+
     admin.initializeApp({
+
         credential: admin.credential.cert(serviceAccount),
 
-        // ⚠️ MUST MATCH serviceAccount project_id
-        databaseURL: "https://fir-c1b0e-default-rtdb.asia-southeast1.firebasedatabase.app"
+        databaseURL: process.env.FIREBASE_DATABASE_URL
+
     });
+
 }
 
-// Database reference (same name so rest code works)
 const db = admin.database();
 
+// ========================================
+// REDIS CLIENT
+// ========================================
 
-// Middleware for session management
+const redisClient = createClient({
+
+    url: process.env.REDIS_URL
+
+});
+
+redisClient.connect().catch(console.error);
+
+// ========================================
+// TRUST PROXY
+// ========================================
+
+
+
+// ========================================
+// SESSION CONFIG
+// ========================================
+
 dealerRouter.use(
-  expressSession({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: true
-  })
+
+    session({
+
+        store: new RedisStore({
+
+            client: redisClient
+
+        }),
+
+        secret: process.env.SESSION_SECRET,
+
+        resave: false,
+
+        saveUninitialized: false,
+
+        rolling: true,
+
+        name: "dealer.sid",
+
+        cookie: {
+
+            secure:
+                process.env.NODE_ENV === "production",
+
+            httpOnly: true,
+
+            sameSite: "lax",
+
+            maxAge:
+                1000 * 60 * 60 * 24 * 30
+
+        }
+
+    })
+
 );
 
-// Middleware to parse incoming form data
-dealerRouter.use(bodyParser.urlencoded({ extended: true }));
+// ========================================
+// BODY PARSER
+// ========================================
 
+dealerRouter.use(bodyParser.urlencoded({
 
+    extended: true,
+
+    limit: "10mb"
+
+}));
+
+dealerRouter.use(bodyParser.json({
+
+    limit: "10mb"
+
+}));
+
+// ========================================
+// LOGIN RATE LIMITER
+// ========================================
+
+const loginLimiter = rateLimit({
+
+    windowMs: 15 * 60 * 1000,
+
+    max: 10,
+
+    message: "Too many login attempts. Try again later.",
+
+    standardHeaders: true,
+
+    legacyHeaders: false
+
+});
+
+// ========================================
+// KEEP SERVER ALIVE
+// ========================================
 
 function keepServerAlive() {
-  const options = {
-    hostname: "jladhesive.in",
-    path: "/dealer/login",
-    method: "GET",
-  };
 
-  const req = https.request(options, (res) => {
-    if (res.statusCode === 301 || res.statusCode === 302) {
-      const redirectUrl = new URL(res.headers.location);
+    const options = {
 
-      // Follow the redirect
-      const redirectOptions = {
-        hostname: redirectUrl.hostname,
-        path: redirectUrl.pathname,
-        method: "GET",
-      };
+        hostname: "pentacore-demo.in",
 
-      const redirectReq = https.request(redirectOptions, () => {
-        // Final redirect handled successfully
-      });
+        path: "/dealer/login",
 
-      redirectReq.on("error", (err) => {
-        console.error(`Error following redirect: ${err.message}`);
-      });
+        method: "GET"
 
-      redirectReq.end();
-    }
-  });
+    };
 
-  req.on("error", (error) => {
-    console.error(`Keep-alive ping error: ${error.message}`);
-  });
+    const req = https.request(options, () => {});
 
-  req.end();
+    req.on("error", (error) => {
+
+        console.error(
+
+            "Keep Alive Error:",
+            error.message
+
+        );
+
+    });
+
+    req.end();
+
 }
 
-// Ping the server every 12 minutes
-setInterval(keepServerAlive, 12 * 60 * 1000);
-// Serve the login page
+setInterval(
+
+    keepServerAlive,
+
+    12 * 60 * 1000
+
+);
+
+// ========================================
+// AUTH MIDDLEWARE
+// ========================================
+
+function isDealerAuthenticated(
+
+    req,
+    res,
+    next
+
+) {
+
+    if (
+
+        req.session &&
+        req.session.isLoggedIn &&
+        req.session.userId
+
+    ) {
+
+        return next();
+
+    }
+
+    return res.redirect("/dealer/login");
+
+}
+
+// ========================================
+// LOGIN PAGE
+// ========================================
+
 dealerRouter.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "dealer-login.html"));
-});
 
-// Handle login form submission
-dealerRouter.post("/login", async (req, res) => {
-  const { userId, password } = req.body;
+    if (
 
-  try {
-    // Reference to the 'dealers' node in Firebase with userId
-    const dealerRef = ref(db, "dealers/" + userId);
-    const snapshot = await get(dealerRef);
+        req.session &&
+        req.session.isLoggedIn
 
-    if (snapshot.exists()) {
-      const dealerData = snapshot.val();
-      
-      if (dealerData.password === password) {
-        // Save the session to keep the user logged in
-        req.session.isLoggedIn = true;
-        req.session.userId = userId;
+    ) {
 
-        // Redirect to the dealer dashboard
-        return res.redirect("/dealer/dealer-dashboard");
-      } else {
-        // Incorrect password
-        return res.status(401).send("Invalid User ID or password.");
-      }
-    } else {
-      // Dealer not found
-      return res.status(401).send("Invalid User ID or password.");
-    }
-  } catch (error) {
-    console.error("Error during login:", error);
-    return res.status(500).send("Internal server error.");
-  }
-});
+        return res.redirect(
+            "/dealer/dealer-dashboard"
+        );
 
-// Dealer dashboard route (only accessible when logged in)
-dealerRouter.get("/dealer-dashboard", (req, res) => {
-  if (req.session.isLoggedIn) {
-    // Show the dealer dashboard page
-    res.sendFile(path.join(__dirname, "views", "dealer-dashboard.html"));
-  } else {
-    // Redirect to login page if not authenticated
-    res.redirect("/dealer/login");
-  }
-});
-
-// Route to get QR code details based on the QR code input
-dealerRouter.get("/get-qr-details/:qrCode", async (req, res) => {
-    const qrCode = req.params.qrCode;
-  
-    try {
-      // Reference to the Firebase 'coupons' node
-      const couponRef = ref(db, 'coupons');
-      const snapshot = await get(couponRef);
-  
-      if (!snapshot.exists()) {
-        return res.status(500).json({ success: false, message: "Error reading data." });
-      }
-  
-      const couponData = snapshot.val();
-  
-       // Find the QR code details
-    const qrCodeDetails = Object.values(couponData).find(item => item.qrCode === qrCode);
-
-    if (qrCodeDetails) {
-      return res.json({
-        success: true,
-        qrCode: qrCodeDetails.qrCode,
-        scannedBy: qrCodeDetails.fullName,
-        mobileNumber: qrCodeDetails.mobileNumber,
-        qrBatch: qrCodeDetails.qrBatch || "N/A",  // Fallback for qrBatch if not found
-        scanDate: qrCodeDetails.dateScanned,
-        transactionAmount: qrCodeDetails.points
-      });
-    } else {
-      return res.json({ success: false });
     }
 
-  } catch (err) {
-    console.error("Error fetching coupon data:", err);
-    return res.status(500).json({ success: false, message: "Failed to fetch QR code details." });
-  }
+    res.sendFile(
+
+        path.join(
+            __dirname,
+            "views",
+            "dealer-login.html"
+        )
+
+    );
+
 });
+
+// ========================================
+// LOGIN POST
+// ========================================
+
+dealerRouter.post(
+
+    "/login",
+
+    loginLimiter,
+
+    async (req, res) => {
+
+        try {
+
+            const {
+
+                userId,
+                password
+
+            } = req.body;
+
+            if (
+
+                !userId ||
+                !password
+
+            ) {
+
+                return res
+                    .status(400)
+                    .send(
+                        "User ID and password required."
+                    );
+
+            }
+
+            const dealerRef = db.ref(
+
+                `dealers/${userId}`
+
+            );
+
+            const snapshot =
+                await dealerRef.get();
+
+            if (!snapshot.exists()) {
+
+                return res
+                    .status(401)
+                    .send(
+                        "Invalid User ID or password."
+                    );
+
+            }
+
+            const dealerData =
+                snapshot.val();
+
+            if (
+
+                dealerData.password !== password
+
+            ) {
+
+                return res
+                    .status(401)
+                    .send(
+                        "Invalid User ID or password."
+                    );
+
+            }
+
+            // SESSION REGENERATION
+            req.session.regenerate(
+
+                async (err) => {
+
+                    if (err) {
+
+                        console.error(err);
+
+                        return res
+                            .status(500)
+                            .send(
+                                "Login failed."
+                            );
+
+                    }
+
+                    req.session.isLoggedIn = true;
+
+                    req.session.userId = userId;
+
+                    req.session.createdAt =
+                        Date.now();
+
+                    req.session.save((err) => {
+
+                        if (err) {
+
+                            console.error(err);
+
+                            return res
+                                .status(500)
+                                .send(
+                                    "Session save failed."
+                                );
+
+                        }
+
+                        return res.redirect(
+                            "/dealer/dealer-dashboard"
+                        );
+
+                    });
+
+                }
+
+            );
+
+        } catch (error) {
+
+            console.error(
+
+                "Dealer Login Error:",
+
+                error
+
+            );
+
+            return res
+                .status(500)
+                .send(
+                    "Internal Server Error."
+                );
+
+        }
+
+    }
+
+);
+
+// ========================================
+// DEALER DASHBOARD
+// ========================================
+
+dealerRouter.get(
+
+    "/dealer-dashboard",
+
+    isDealerAuthenticated,
+
+    (req, res) => {
+
+        res.sendFile(
+
+            path.join(
+
+                __dirname,
+                "views",
+                "dealer-dashboard.html"
+
+            )
+
+        );
+
+    }
+
+);
+
+// ========================================
+// GET QR DETAILS
+// ========================================
+
+dealerRouter.get(
+
+    "/get-qr-details/:qrCode",
+
+    isDealerAuthenticated,
+
+    async (req, res) => {
+
+        try {
+
+            const qrCode =
+                req.params.qrCode;
+
+            const couponRef =
+                db.ref("coupons");
+
+            const snapshot =
+                await couponRef.get();
+
+            if (!snapshot.exists()) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message:
+                        "No coupon data found."
+
+                });
+
+            }
+
+            const couponData =
+                snapshot.val();
+
+            const qrCodeDetails =
+                Object.values(couponData)
+                .find(
+
+                    item =>
+                        item.qrCode === qrCode
+
+                );
+
+            if (!qrCodeDetails) {
+
+                return res.json({
+
+                    success: false,
+
+                    message:
+                        "QR code not found."
+
+                });
+
+            }
+
+            return res.json({
+
+                success: true,
+
+                qrCode:
+                    qrCodeDetails.qrCode,
+
+                scannedBy:
+                    qrCodeDetails.fullName,
+
+                mobileNumber:
+                    qrCodeDetails.mobileNumber,
+
+                qrBatch:
+                    qrCodeDetails.qrBatch ||
+                    "N/A",
+
+                scanDate:
+                    qrCodeDetails.dateScanned,
+
+                transactionAmount:
+                    qrCodeDetails.points
+
+            });
+
+        } catch (error) {
+
+            console.error(
+
+                "QR Fetch Error:",
+
+                error
+
+            );
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Internal Server Error."
+
+            });
+
+        }
+
+    }
+
+);
+
+// ========================================
+// LOGOUT
+// ========================================
+
+dealerRouter.post(
+
+    "/logout",
+
+    isDealerAuthenticated,
+
+    (req, res) => {
+
+        req.session.destroy((err) => {
+
+            if (err) {
+
+                console.error(err);
+
+                return res
+                    .status(500)
+                    .send(
+                        "Logout failed."
+                    );
+
+            }
+
+            res.clearCookie("dealer.sid");
+
+            return res.redirect(
+                "/dealer/login"
+            );
+
+        });
+
+    }
+
+);
 
 module.exports = dealerRouter;
-
-
-
