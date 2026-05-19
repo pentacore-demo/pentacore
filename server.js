@@ -10,9 +10,8 @@ const path = require('path');
 
 const app = express();
 
-
-app.set('trust proxy', 1)
-
+app.set("trust proxy", 1);
+`   `
 // Mount admin router under /admin
 app.use('/user', userRouter);
 app.use("/admin", adminRouter);
@@ -38,6 +37,10 @@ app.get('/about-us', (req, res) => {
 
 app.get('/pricing', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'pricing.html'));
+});
+
+app.get('/privacy-policy', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'privacy-policy.html'));
 });
 
 const PORT = 3000;
