@@ -180,7 +180,7 @@ adminRouter.post("/create-qr", async (req, res) => {
         if (
     !Number.isInteger(numQrs) ||
     numQrs < 1 ||
-    numQrs > 10001
+    numQrs > 5001
 ) {
     return res.status(400).send("Invalid QR amount");
 }
