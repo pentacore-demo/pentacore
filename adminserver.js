@@ -134,7 +134,7 @@ adminRouter.get("/login", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
-adminRouter.post("/login", (req, res) => {
+adminRouter.post("/login", loginLimiter, (req, res) => {
     const { email, password } = req.body;
 
     const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
