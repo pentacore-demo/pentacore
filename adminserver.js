@@ -177,36 +177,55 @@ adminRouter.post("/create-qr", async (req, res) => {
     try {
 
         const numQrs = parseInt(req.body.numQrs);
+        if (
+    !Number.isInteger(numQrs) ||
+    numQrs < 1 ||
+    numQrs > 10001
+) {
+    return res.status(400).send("Invalid QR amount");
+}
         const points = req.body.points;
 
         const batchId = await getNextBatchId();
         const timestamp = new Date().toISOString();
 
-        // Batch object
-        const batch = {
-            createdAt: timestamp,
-            points: points,
-            couponCount: numQrs,
-            qrCodes: []
-        };
+       // Batch object
+const batch = {
+    createdAt: timestamp,
+    points: points,
+    couponCount: numQrs,
+    qrCodes: []
+};
 
-        // Generate QR codes
-        for (let i = 0; i < numQrs; i++) {
+// ✅ MOVE THIS HERE
+const qrIndexUpdates = {};
 
-            const qrCodeData = generateRandomString(9);
+// Generate QR codes
+for (let i = 0; i < numQrs; i++) {
 
-            batch.qrCodes.push({
-                code: qrCodeData,
-                status: "Not Scanned",
-                points: points,
-                createdAt: timestamp
-            });
+    const qrCodeData = generateRandomString(10);
 
-        }
+    batch.qrCodes.push({
+        code: qrCodeData,
+        status: "Not Scanned",
+        points: points,
+        createdAt: timestamp
+    });
 
-        // SAVE TO FIREBASE
-        const batchRef = db.ref(`batches/${batchId}`);
-        await batchRef.set(batch);
+    // FAST LOOKUP INDEX
+    qrIndexUpdates[qrCodeData] = {
+        batchId,
+        index: i
+    };
+}
+
+// SAVE TO FIREBASE
+const batchRef = db.ref(`batches/${batchId}`);
+
+await batchRef.set(batch);
+
+// SAVE INDEX
+await db.ref("qrIndex").update(qrIndexUpdates)
 
         // PREMIUM SUCCESS UI
         res.send(`
